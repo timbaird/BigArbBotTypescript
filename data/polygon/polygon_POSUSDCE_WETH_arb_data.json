@@ -1,0 +1,62 @@
+{    
+    "LIVE": "true",
+    "WEBSOCKET": "wss://polygon-mainnet.infura.io/ws/v3/",
+    "BLOCKCHAIN": "POLYGON",
+    "CHAINID" : 137,
+    "ARBCONTRACT": "XXXXX",
+    "ARBCONTRACT_ABI_PATH": "XXXX",
+    "PAIRS":[
+        {
+            "TOKEN0" : {
+                "NAME": "POSUSDCE",
+                "ADDRESS": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+                "DECIMAL_PLACES": 6
+            },
+            "TOKEN1" : {
+                "NAME": "WETH",
+                "ADDRESS": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+                "DECIMAL_PLACES": 18
+            },
+            "ARB_INPUT_SIZES": [25, 50, 75, 100],
+            "POOLS":[   
+                {
+                    "PROTOCOL": "UNISWAPV2",
+                    "NAME": "QUICKSWAP_UV2",
+                    "FACTORY_ADDR": "0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32",
+                    "ROUTER_ADDR": "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff",
+                    "PAIR_ADDR": "0x853Ee4b2A13f8a742d64C8F088bE7bA2131f670d"
+                },
+                {
+                    "PROTOCOL": "UNISWAPV2",
+                    "NAME": "SUSHISWAP_UV2",
+                    "FACTORY_ADDR": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+                    "ROUTER_ADDR": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+                    "PAIR_ADDR": "0x34965ba0ac2451A34a0471F04CCa3F990b8dea27"
+                },
+                {
+                    "PROTOCOL": "UNISWAPV2",
+                    "NAME": "APESWAP_UV2",
+                    "FACTORY_ADDR": "0xCf083Be4164828f00cAE704EC15a36D711491284",
+                    "ROUTER_ADDR" : "0xC0788A3aD43d79aa53B09c2EaCc313A787d1d607",
+                    "PAIR_ADDR": "0x84964d9f9480a1dB644c2B2D1022765179A40F68"
+                },
+                {
+                    "PROTOCOL": "UNISWAPV2",
+                    "NAME": "DYFN_UV2",
+                    "FACTORY_ADDR": "0xE7Fb3e833eFE5F9c441105EB65Ef8b261266423B",
+                    "ROUTER_ADDR": "0xA102072A4C07F06EC3B4900FDC4C7B80b6c57429",
+                    "PAIR_ADDR": "0x7D51bAd48d253dae37cC82cad07f73849286Deec"
+                },
+                {
+                    "PROTOCOL": "UNISWAPV2",
+                    "NAME": "JETSWAP_UV2",
+                    "FACTORY_ADDR": "0x668ad0ed2622C62E24f0d5ab6B6Ac1b9D2cD4AC7",
+                    "ROUTER_ADDR": "0x5C6EC38fb0e2609672BDf628B1fD605A523E5923",
+                    "PAIR_ADDR": "0xFEFF91C350bB564cA5Dc7D6F7DcD12ac092F94FF"
+                }
+            ]
+        }
+    ]
+}         
+
+

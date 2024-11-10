@@ -34,10 +34,6 @@
   },
   "workspaces": [
     "packages/solidity",
-    "packages/uniswapv2integration",
-    "packages/uniswapv3integration",
-    "packages/kyberclassicintegration",
-    "packages/balancerintegration",
     "packages/mainbot"
   ]
 }
