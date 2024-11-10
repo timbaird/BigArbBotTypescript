@@ -6,16 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ArbToken_1 = __importDefault(require("./ArbToken"));
 const PoolUV2_1 = __importDefault(require("./PoolUV2"));
 class ArbPair {
-    constructor(PAIRDATA, _provider, _tracker, _emmitter, _logger) {
+    constructor(PAIRDATA, _utils) {
         this.pools = [];
         this.pair_name = "";
-        this.token0 = new ArbToken_1.default(PAIRDATA["TOKEN0"]["ADDRESS"], _provider, _logger);
-        this.token1 = new ArbToken_1.default(PAIRDATA["TOKEN1"]["ADDRESS"], _provider, _logger);
+        this.token0 = new ArbToken_1.default(PAIRDATA["TOKEN0"]["ADDRESS"], _utils);
+        this.token1 = new ArbToken_1.default(PAIRDATA["TOKEN1"]["ADDRESS"], _utils);
         this.arbInputSizes = PAIRDATA["ARB_INPUT_SIZES"];
-        this.provider = _provider;
-        this.logger = _logger;
-        this.tracker = _tracker;
-        this.emitter = _emmitter;
+        this.utils = _utils;
     }
     async initialise(PAIRDATA) {
         await this.token0.initalise();
@@ -24,7 +21,7 @@ class ArbPair {
         for (let i = 0; i < PAIRDATA["POOLS"].length; i++) {
             switch (PAIRDATA["POOLS"][i]["PROTOCOL"]) {
                 case "UNISWAPV2":
-                    pool = new PoolUV2_1.default(this.toString(), PAIRDATA["POOLS"][i], this.provider, this.emitter, this.logger);
+                    pool = new PoolUV2_1.default(this.toString(), PAIRDATA["POOLS"][i], this.utils.provider, this.utils.swapEmitter, this.utils.logger);
                     break;
                 case "UNISWAPV3":
                     console.log("uniswapv3 pools not yet developed");
@@ -39,7 +36,7 @@ class ArbPair {
                     console.log(`pool protocol not recognised ${PAIRDATA["POOLS"][i]["NAME"]} ${PAIRDATA["POOLS"][i]["PROTOCOL"]}`);
             }
             if (pool !== null) {
-                pool.startSwapListener(this.tracker);
+                pool.startSwapListener(this.utils.tracker);
                 await pool.loadPrices();
                 this.pools.push(pool);
             }

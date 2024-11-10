@@ -1,6 +1,6 @@
-import { Contract, WebSocketProvider } from "ethers";
+import { Contract } from "ethers";
 import ERC20ABI from "../../../../../abis/ERC20_ABI.json";
-import ArbLogger from "./ArbLogger";
+import ArbUtilities from "./ArbUtilities";
 
 class ArbToken{
     address: string;
@@ -8,9 +8,9 @@ class ArbToken{
     symbol: string = "";
     decimals: number = 0;
 
-    constructor(_address: string, _provider: WebSocketProvider, _logger: ArbLogger) {
+    constructor(_address: string, _utils:ArbUtilities) {
         this.address = _address;
-        this.contract = new Contract(_address, ERC20ABI, _provider);
+        this.contract = new Contract(_address, ERC20ABI, _utils.provider);
     }
 
     async initalise(): Promise<void> {

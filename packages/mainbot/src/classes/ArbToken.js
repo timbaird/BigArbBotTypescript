@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ethers_1 = require("ethers");
 const ERC20_ABI_json_1 = __importDefault(require("../../../../../abis/ERC20_ABI.json"));
 class ArbToken {
-    constructor(_address, _provider, _logger) {
+    constructor(_address, _utils) {
         this.symbol = "";
         this.decimals = 0;
         this.address = _address;
-        this.contract = new ethers_1.Contract(_address, ERC20_ABI_json_1.default, _provider);
+        this.contract = new ethers_1.Contract(_address, ERC20_ABI_json_1.default, _utils.provider);
     }
     async initalise() {
         try {

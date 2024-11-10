@@ -2,36 +2,37 @@ import IArbSearchParams from "../interfaces/IArbSearchParams"
 import IArbExecutionParams from "../interfaces/IArbExecutionParams";
 import SwapEventEmitter from "./SwapEventEmitter";
 import ISwapEventData from "../interfaces/ISwapEventData";
+import ArbUtilities from "./ArbUtilities";
 
 class ArbFinder{
-    emitter: SwapEventEmitter;
     searchQueue: ISwapEventData[] = [];
     currentlySearching: boolean = false;
+    utils: ArbUtilities;
 
-    constructor(_emitter: SwapEventEmitter) {
-        this.emitter = _emitter;
+    constructor(_utils: ArbUtilities) {
+        this.utils = _utils;
 
-        this.emitter.on("internalSwapEvent", (data: ISwapEventData) => {
-            console.log("Yipee MUTHA PLUCKERS from inside the arb searcher", data);
+        this.utils.swapEmitter.on("internalSwapEvent", (data: ISwapEventData) => {
             this.searchQueue.push(data);
-            console.log(`currently searching ${this.currentlySearching}`);
             if (!this.currentlySearching) {
                 this.searchForArbs();
             }
-            
-            // Additional processing logic here
         });
     }
 
-    searchForArbs(): void{
+    async searchForArbs(): Promise<void>{
         this.currentlySearching = true;
         
         while (this.searchQueue.length > 0) {
-            console.log(`searchQueue length before : ${this.searchQueue.length}`);
+            //console.log(`searchQueue length before : ${this.searchQueue.length}`);
             const currentPair: any = this.searchQueue.shift(); // takes the top element from the array to process it
-            console.log(`searchQueue length after : ${this.searchQueue.length}`);
-            setTimeout(() => console.log(`ArbFinder is searching for arbs for ${currentPair.pairName}`), 2000);
+            //console.log(`searchQueue length after : ${this.searchQueue.length}`);
+            await this.utils.wait(1000);
+            console.log(`ArbFinder is searching for arbs for ${currentPair.pairName}`);
+            await this.utils.wait(5000);
+            console.log(`No arbs found for ${currentPair.pairName}`);
         }
+
         this.currentlySearching = false;
     }
 }
