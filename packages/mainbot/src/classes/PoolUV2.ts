@@ -6,6 +6,7 @@ import ListenerTracker from "../../../mainbot/src/classes/ListenerTracker";
 import UniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json';
 import SwapEventEmitter from "./SwapEventEmitter";
 import ISwapEventData from "../interfaces/ISwapEventData";
+import ArbUtilities from "./ArbUtilities";
     
 const { abi: UniswapV2PairABI } = UniswapV2Pair;
 
@@ -18,22 +19,19 @@ class PoolUV2 implements IPool{
     pool_addr: string;
     pool: Contract;
     priceData: IPriceData[];
-    logger: ArbLogger;
-    provider: WebSocketProvider;
-    emitter: SwapEventEmitter;
+    utils: ArbUtilities;
 
 
-    constructor(_pairName: string, DATA: any, _provider: WebSocketProvider, _emitter: SwapEventEmitter, _logger: ArbLogger) {
+    constructor(_pairName: string, DATA: any, _utils:ArbUtilities) {
         this.pairName = _pairName;
         this.name = DATA["NAME"];
         this.factory_addr = DATA["FACTORY_ADDR"];
         this.router_addr = DATA["ROUTER_ADDR"];
         this.pool_addr = DATA["PAIR_ADDR"];
-        this.pool = new Contract(this.pool_addr, UniswapV2PairABI, _provider);
+        this.utils = _utils;
+        this.pool = new Contract(this.pool_addr, UniswapV2PairABI, _utils.provider);
         this.priceData = [];
-        this.logger = _logger;
-        this.provider = _provider;
-        this.emitter = _emitter;
+        
     }
 
     async loadPrices(): Promise<void> {

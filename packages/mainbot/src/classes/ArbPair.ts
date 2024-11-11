@@ -35,7 +35,7 @@ class ArbPair{
 
             switch (PAIRDATA["POOLS"][i]["PROTOCOL"]) {
                 case "UNISWAPV2":
-                    pool = new PoolUV2(this.toString(), PAIRDATA["POOLS"][i], this.utils.provider, this.utils.swapEmitter, this.utils.logger);
+                    pool = new PoolUV2(this.toString(), PAIRDATA["POOLS"][i], this.utils);
                     break;
                 case "UNISWAPV3":
                     console.log("uniswapv3 pools not yet developed");
