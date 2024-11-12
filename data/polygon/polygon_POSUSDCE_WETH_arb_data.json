@@ -18,7 +18,7 @@
                 "ADDRESS": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
                 "DECIMAL_PLACES": 18
             },
-            "ARB_INPUT_SIZES": [25, 50, 75, 100],
+            "ARB_INPUT_SIZES": [1, 5, 10, 20, 50],
             "POOLS":[   
                 {
                     "PROTOCOL": "UNISWAPV2",
@@ -89,21 +89,11 @@
                     "FEE": 3000
                 },
                 {
-                    "PROTOCOL": "KYBERCLASSIC_STATIC",
-                    "NAME": "KYBERSWAP_STATIC",
-                    "FACTORY_ADDR": "0x1c758aF0688502e49140230F6b0EBd376d429be5",
-                    "ROUTER_ADDR": "0x5649B4DD00780e99Bab7Abb4A3d581Ea1aEB23D0",
-                    "ZAPLN": "0x2abE8750e4a65584d7452316356128C936273e0D",
-                    "POOL_ADDR": "",
-                    "FEE": 3000
-                },
-                {
-                    "PROTOCOL": "KYBERCLASSIC_DYNAMIC",
-                    "NAME": "KYBERSWAP_DYNAMIC",
+                    "PROTOCOL": "KYBERCLASSIC",
+                    "NAME": "KYBER_CLASSIC_DYNAMIC",
                     "FACTORY_ADDR": "0x5F1fe642060B5B9658C15721Ea22E982643c095c",
                     "ROUTER_ADDR": "0x546C79662E028B661dFB4767664d0273184E4dD1",
-                    "ZAPLN": "0x83D4908c1B4F9Ca423BEE264163BC1d50F251c31",
-                    "POOL_ADDR": "",
+                    "POOL_ADDR": "0x08Cb78d00949de6ce12A85666d6580e2EBa9B6C4",
                     "FEE": 3000
                 },
                 {

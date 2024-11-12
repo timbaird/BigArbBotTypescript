@@ -3,6 +3,7 @@ import ListenerTracker from "./ListenerTracker";
 import ArbLogger from "./ArbLogger";
 import SwapEventEmitter from "./SwapEventEmitter";
 import MulticallABI from '../../../../../abis/MulticallABI.json';
+import ArbEventEmitter from "./ArbEventEmitter";
 
 
 
@@ -11,6 +12,7 @@ class ArbUtilities{
     tracker: ListenerTracker;
     logger: ArbLogger;
     swapEmitter: SwapEventEmitter;
+    arbEmitter: ArbEventEmitter;
     multicall: Contract; 
 
     constructor(_webSocket: string, _apiKey:string, _multicall_addr: string) {
@@ -19,6 +21,7 @@ class ArbUtilities{
         this.logger = new ArbLogger("TEST_LOG xxxxxx", "../../../logs/");
         this.tracker = new ListenerTracker(this.logger);
         this.swapEmitter = new SwapEventEmitter();
+        this.arbEmitter = new ArbEventEmitter();
         this.multicall = new Contract(_multicall_addr, MulticallABI, this.provider);
     }
 

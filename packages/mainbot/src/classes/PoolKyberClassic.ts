@@ -1,19 +1,18 @@
-import IPool from "../../../mainbot/src/interfaces/IPool"
-import IPriceData from "../../../mainbot/src/interfaces/IPriceData";
+import IPool from "../interfaces/IPool"
+import IPriceData from "../interfaces/IPriceData";
 import { Contract, ethers, parseUnits } from "ethers";
-import ListenerTracker from "../../../mainbot/src/classes/ListenerTracker";
-import UniswapV2Pair from '@uniswap/v2-core/build/IUniswapV2Pair.json';
-import UniswapV2Router from "@uniswap/v2-periphery/build/UniswapV2Router02.json";
+import ListenerTracker from "./ListenerTracker";
+import KyberswapDmmPoolAbi from '../../../../../abis/kyberDMMPoolABI.json';
+import KyberswapDmmRouterAbi from '../../../../../abis/kyberDmmRouterABI.json';
 import ISwapEventData from "../interfaces/ISwapEventData";
 import IGetAmountsInParams from "../interfaces/IGetAmountsInParams";
 import IGetAmountsOutParams from "../interfaces/IGetAmountsOutParams";
 import ArbUtilities from "./ArbUtilities";
 import ArbToken from "./ArbToken";
-const { abi: UniswapV2PairABI } = UniswapV2Pair;
 
-class PoolUV2 implements IPool{
+class PoolKyberClassic implements IPool{
     name: string;
-    protocol: string = "UNISWAPV2";
+    protocol: string = "KYBERCLASSIC";
     pairName: string;
     tokens: ArbToken[];
     factory_addr: string;
@@ -27,19 +26,22 @@ class PoolUV2 implements IPool{
     utils: ArbUtilities;
     currentlyLoadingPrices: Boolean = false;
 
+
     constructor(_pairName: string, DATA: any, _tokens: ArbToken[], _arbInputSizes: number[], _utils: ArbUtilities) {
         this.pairName = _pairName;
         this.name = DATA["NAME"];
-        this.pool_addr = DATA["PAIR_ADDR"];
+        this.pool_addr = DATA["POOL_ADDR"];
         this.fee = DATA["FEE"];
         this.factory_addr = DATA["FACTORY_ADDR"];
         this.router_addr = DATA["ROUTER_ADDR"];
         this.tokens = _tokens;
         this.arbInputSizes = _arbInputSizes;
         this.utils = _utils;
-        const { abi: RouterABI } = UniswapV2Router;
-        this.router = new Contract(this.router_addr, RouterABI, this.utils.provider);
-        this.pool = new Contract(this.pool_addr, UniswapV2PairABI, _utils.provider);
+        //
+
+        this.router = new Contract(this.router_addr, KyberswapDmmRouterAbi, this.utils.provider);
+
+        this.pool = new Contract(this.pool_addr, KyberswapDmmPoolAbi, _utils.provider);
         this.priceData = [];
     }
 
@@ -47,35 +49,41 @@ class PoolUV2 implements IPool{
         this.currentlyLoadingPrices = true;
         try {
             // reset existing priceData
-            this.priceData.length = 0;
+            this.priceData = [];
 
             // set up for the multicall
             const data: any[] = [];
             const targets: string[] = [];
             let amt: bigint;
-        
+            
             // for each of the arb Input Sizes we are tracking
             for (let i = 0; i < this.arbInputSizes.length; i++) {
-            
+                
                 // denominated in token0's
                 amt = parseUnits(this.arbInputSizes[i].toString(), this.tokens[0].decimals);
-            
+
                 // set up for getAmountsOut - purchase token 1 price  (denominated in token0)
                 targets.push(this.router_addr);
-                const encodedOut: any = this.router.interface.encodeFunctionData("getAmountsOut", [amt, [this.tokens[0].address, this.tokens[1].address]]);
+                const encodedOut: any = this.router.interface.encodeFunctionData("getAmountsOut", [amt, [this.pool_addr], [this.tokens[0].address, this.tokens[1].address]]);
                 data.push(encodedOut);
-
+                
                 // set up for getAmountsIn - selling  token 1 price  (denominated in token0)
                 targets.push(this.router_addr);
-                const encodedIn: any = this.router.interface.encodeFunctionData("getAmountsIn", [amt, [this.tokens[1].address, this.tokens[0].address]]);
+                const encodedIn: any = this.router.interface.encodeFunctionData("getAmountsIn", [amt, [this.pool_addr], [this.tokens[1].address, this.tokens[0].address]]);
                 data.push(encodedIn);
 
             }
-        
+            console.log(targets.length);
+            console.log(data.length);
+
+            console.log(4);
             // this should get the price data in a single call
             const results = await this.utils.multicall.multicall.staticCall(targets, data);
-        
+            console.log(5);
+            console.log(`number of results: ${results.length}`);
+
             for (let i = 0; i < results.length; i += 2) {
+                
                 const decodedIn = this.router.interface.decodeFunctionResult("getAmountsOut", results[i]);
                 const decodedOut = this.router.interface.decodeFunctionResult("getAmountsIn", results[i + 1]);
                 let amt: number = 0;
@@ -89,25 +97,24 @@ class PoolUV2 implements IPool{
 
                 //console.log(`${typeof(10n)} - ${typeof (this.tokenDecimals[1])} `);
                 const decimalShift: bigint = 10n ** BigInt(this.tokens[1].decimals);
-            
+                
                 const priceIn: number = (parseFloat(amt.toString()) / parseFloat(decodedIn[0][1].toString())) * parseFloat(decimalShift.toString());
                 const priceOut: number = (parseFloat(amt.toString()) / parseFloat(decodedOut[0][0].toString())) * parseFloat(decimalShift.toString());
 
                 this.priceData.push({ "direction": "BUY", "amt": amt, "price": priceIn });
                 this.priceData.push({ "direction": "SELL", "amt": amt, "price": priceOut });
             }
-        } catch (ex: any){
-            
+        } catch (ex: any) {
+            console.log(`error pool in ${this.pairName} - ${this.name} : ${ex.message}`);
         } finally {
             this.currentlyLoadingPrices = false;
         }
         //just for validating price data has loaded correctly
         
-        // console.log(`PoolUV2 ${this.name} RouterV2 price data loaded`);
+        // console.log(`KyberClassic ${this.name} DmmRouter price data loaded`);
         // for (let fuckyou = 0; fuckyou < this.priceData.length; fuckyou++){
         //     console.log(`${this.priceData[fuckyou].direction} ${this.priceData[fuckyou].amt}  ${this.priceData[fuckyou].price}`);
         // }
-
     }
 
     getPrices(): IPriceData[] {
@@ -121,13 +128,12 @@ class PoolUV2 implements IPool{
 
     async handleSwapEvent(): Promise<void> {
         const aest = new Date().toLocaleString();
-        //console.log(`SWAP event detected on ${this.name} at ${aest}`);
+        console.log(`SWAP event detected on ${this.name} at ${aest}`);
         this.utils.logger.log('info', `SWAP event detected on ${this.name} at ${aest}`);
-        if (!this.currentlyLoadingPrices)
-            await this.loadPrices();
+        await this.loadPrices();
         const data: ISwapEventData = {pairName: this.pairName}
         this.utils.swapEmitter.emit("internalSwapEvent", data);
     }
 }
 
-export default PoolUV2;
+export default PoolKyberClassic;

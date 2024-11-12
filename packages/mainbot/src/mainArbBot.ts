@@ -6,6 +6,7 @@ import GracefulExit from "./classes/GracefulExit";
 import ArbPair from './classes/ArbPair';
 import ArbFinder from "./classes/ArbFinder";
 import ArbUtilities from "./classes/ArbUtilities";
+import ArbExecutor from "./classes/ArbExceutor";
 
 const INFURA_API_KEY: string = vars.get("INFURA_API_KEY");
 
@@ -19,10 +20,8 @@ async function main(DATA: any): Promise<void>{
     // than in the ArbPair constructor
     await pair.initialise(DATA["PAIRS"][0]);
 
-    const finder: ArbFinder = new ArbFinder(utils);
+    const finder: ArbFinder = new ArbFinder([pair], utils);
+    const executor: ArbExecutor = new ArbExecutor(utils);
 }
 
 export default main;
-
-
-

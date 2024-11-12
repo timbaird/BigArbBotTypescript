@@ -5,6 +5,7 @@ import ArbToken from "./ArbToken";
 import IPool from "../interfaces/IPool";
 import PoolUV2 from "./PoolUV2";
 import PoolUV3 from "./PoolUV3";
+import PoolKyberClassic from "./PoolKyberClassic";
 import ListenerTracker from "./ListenerTracker";
 import SwapEventEmitter from "./SwapEventEmitter";
 import ArbUtilities from "./ArbUtilities";
@@ -30,23 +31,19 @@ class ArbPair{
         await this.token0.initalise();
         await this.token1.initalise();
 
-        
-
         for (let i = 0; i < PAIRDATA["POOLS"].length; i++) {
             let pool: IPool | null = null;
             switch (PAIRDATA["POOLS"][i]["PROTOCOL"]) {
                 case "UNISWAPV2":
-                    pool = new PoolUV2(this.toString(), PAIRDATA["POOLS"][i], this.arbInputSizes, [this.token0.decimals , this.token1.decimals] ,this.utils);
+                    pool = new PoolUV2(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
                     break;
                 case "UNISWAPV3":
-                    pool = new PoolUV3(this.toString(), PAIRDATA["POOLS"][i], this.arbInputSizes, [this.token0.decimals , this.token1.decimals] ,this.utils);
+                    pool = new PoolUV3(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
                     break;
-                case "KYBERCLASSIC_STATIC":
-                    console.log("kyber classic static fee pools not yet developed");
+                case "KYBERCLASSIC":
+                    //pool = new PoolKyberClassic(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
+                    console.log("kyber classic pools not yet finished");
                     break;
-                case "KYBERCLASSIC_DYNAMIC":
-                        console.log("kyber classic dynamic fee pools not yet developed");
-                        break;
                 case "BALANCERV2":
                     console.log("balancer pools not yet developed");
                     break;

@@ -22,16 +22,14 @@ class ArbPair {
             let pool = null;
             switch (PAIRDATA["POOLS"][i]["PROTOCOL"]) {
                 case "UNISWAPV2":
-                    pool = new PoolUV2_1.default(this.toString(), PAIRDATA["POOLS"][i], this.arbInputSizes, [this.token0.decimals, this.token1.decimals], this.utils);
+                    pool = new PoolUV2_1.default(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
                     break;
                 case "UNISWAPV3":
-                    pool = new PoolUV3_1.default(this.toString(), PAIRDATA["POOLS"][i], this.arbInputSizes, [this.token0.decimals, this.token1.decimals], this.utils);
+                    pool = new PoolUV3_1.default(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
                     break;
-                case "KYBERCLASSIC_STATIC":
-                    console.log("kyber classic static fee pools not yet developed");
-                    break;
-                case "KYBERCLASSIC_DYNAMIC":
-                    console.log("kyber classic dynamic fee pools not yet developed");
+                case "KYBERCLASSIC":
+                    //pool = new PoolKyberClassic(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
+                    console.log("kyber classic pools not yet finished");
                     break;
                 case "BALANCERV2":
                     console.log("balancer pools not yet developed");

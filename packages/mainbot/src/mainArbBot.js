@@ -10,6 +10,7 @@ const GracefulExit_1 = __importDefault(require("./classes/GracefulExit"));
 const ArbPair_1 = __importDefault(require("./classes/ArbPair"));
 const ArbFinder_1 = __importDefault(require("./classes/ArbFinder"));
 const ArbUtilities_1 = __importDefault(require("./classes/ArbUtilities"));
+const ArbExceutor_1 = __importDefault(require("./classes/ArbExceutor"));
 const INFURA_API_KEY = config_1.vars.get("INFURA_API_KEY");
 async function main(DATA) {
     const utils = new ArbUtilities_1.default(DATA["WEBSOCKET"], INFURA_API_KEY, DATA["MULTICALL_ADDR"]);
@@ -19,6 +20,7 @@ async function main(DATA) {
     // operations and need to be awaited, which it is simpler to do here
     // than in the ArbPair constructor
     await pair.initialise(DATA["PAIRS"][0]);
-    const finder = new ArbFinder_1.default(utils);
+    const finder = new ArbFinder_1.default([pair], utils);
+    const executor = new ArbExceutor_1.default(utils);
 }
 exports.default = main;

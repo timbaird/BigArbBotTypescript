@@ -1,7 +1,7 @@
 interface IPriceData {
     direction: string, 
     amt: number,
-    price: bigint
+    price: number
 }
 
 export default IPriceData;
