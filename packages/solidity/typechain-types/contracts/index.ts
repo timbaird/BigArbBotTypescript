@@ -9,5 +9,6 @@ export type { IntegrationBalancer } from "./IntegrationBalancer";
 export type { IntegrationUniswapV2 } from "./IntegrationUniswapV2";
 export type { IntegrationUniswapV3 } from "./IntegrationUniswapV3";
 export type { Lock } from "./Lock";
+export type { Multicall } from "./Multicall";
 export type { Swapper } from "./Swapper";
 export type { Test } from "./Test";

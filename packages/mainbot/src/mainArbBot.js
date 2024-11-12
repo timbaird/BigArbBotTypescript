@@ -12,7 +12,7 @@ const ArbFinder_1 = __importDefault(require("./classes/ArbFinder"));
 const ArbUtilities_1 = __importDefault(require("./classes/ArbUtilities"));
 const INFURA_API_KEY = config_1.vars.get("INFURA_API_KEY");
 async function main(DATA) {
-    const utils = new ArbUtilities_1.default(DATA["WEBSOCKET"], INFURA_API_KEY);
+    const utils = new ArbUtilities_1.default(DATA["WEBSOCKET"], INFURA_API_KEY, DATA["MULTICALL_ADDR"]);
     GracefulExit_1.default.setUp(utils);
     const pair = new ArbPair_1.default(DATA["PAIRS"][0], utils);
     // initialise is done seperately here because it involves async

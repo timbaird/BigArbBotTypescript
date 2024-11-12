@@ -8,5 +8,6 @@ export { IntegrationBalancer__factory } from "./IntegrationBalancer__factory";
 export { IntegrationUniswapV2__factory } from "./IntegrationUniswapV2__factory";
 export { IntegrationUniswapV3__factory } from "./IntegrationUniswapV3__factory";
 export { Lock__factory } from "./Lock__factory";
+export { Multicall__factory } from "./Multicall__factory";
 export { Swapper__factory } from "./Swapper__factory";
 export { Test__factory } from "./Test__factory";

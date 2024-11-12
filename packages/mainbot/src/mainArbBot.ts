@@ -11,7 +11,7 @@ const INFURA_API_KEY: string = vars.get("INFURA_API_KEY");
 
 async function main(DATA: any): Promise<void>{
     
-    const utils = new ArbUtilities(DATA["WEBSOCKET"], INFURA_API_KEY);
+    const utils = new ArbUtilities(DATA["WEBSOCKET"], INFURA_API_KEY, DATA["MULTICALL_ADDR"]);
     GracefulExit.setUp(utils);
     const pair: ArbPair = new ArbPair(DATA["PAIRS"][0], utils);
     // initialise is done seperately here because it involves async

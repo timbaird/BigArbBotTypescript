@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Test__factory = exports.Swapper__factory = exports.Lock__factory = exports.IntegrationUniswapV3__factory = exports.IntegrationUniswapV2__factory = exports.IntegrationKyberClassic__factory = exports.IDMMExchangeRouter__factory = exports.IntegrationBalancer__factory = exports.ArbRoleManager__factory = exports.ArbMoneyManager__factory = exports.IUniswapV2Router02__factory = exports.IUniswapV2Router01__factory = exports.IERC165__factory = exports.ERC165__factory = exports.IERC20__factory = exports.IAccessControl__factory = exports.AccessControl__factory = exports.factories = void 0;
+exports.Test__factory = exports.Swapper__factory = exports.Multicall__factory = exports.Lock__factory = exports.IntegrationUniswapV3__factory = exports.IntegrationUniswapV2__factory = exports.IntegrationKyberClassic__factory = exports.IDMMExchangeRouter__factory = exports.IntegrationBalancer__factory = exports.ArbRoleManager__factory = exports.ArbMoneyManager__factory = exports.IUniswapV2Router02__factory = exports.IUniswapV2Router01__factory = exports.IERC165__factory = exports.ERC165__factory = exports.IERC20__factory = exports.IAccessControl__factory = exports.AccessControl__factory = exports.factories = void 0;
 exports.factories = __importStar(require("./factories"));
 var AccessControl__factory_1 = require("./factories/@openzeppelin/contracts/access/AccessControl__factory");
 Object.defineProperty(exports, "AccessControl__factory", { enumerable: true, get: function () { return AccessControl__factory_1.AccessControl__factory; } });
@@ -55,6 +55,8 @@ var IntegrationUniswapV3__factory_1 = require("./factories/contracts/Integration
 Object.defineProperty(exports, "IntegrationUniswapV3__factory", { enumerable: true, get: function () { return IntegrationUniswapV3__factory_1.IntegrationUniswapV3__factory; } });
 var Lock__factory_1 = require("./factories/contracts/Lock__factory");
 Object.defineProperty(exports, "Lock__factory", { enumerable: true, get: function () { return Lock__factory_1.Lock__factory; } });
+var Multicall__factory_1 = require("./factories/contracts/Multicall__factory");
+Object.defineProperty(exports, "Multicall__factory", { enumerable: true, get: function () { return Multicall__factory_1.Multicall__factory; } });
 var Swapper__factory_1 = require("./factories/contracts/Swapper__factory");
 Object.defineProperty(exports, "Swapper__factory", { enumerable: true, get: function () { return Swapper__factory_1.Swapper__factory; } });
 var Test__factory_1 = require("./factories/contracts/Test__factory");

@@ -13,7 +13,21 @@ class ArbFinder{
         this.utils = _utils;
 
         this.utils.swapEmitter.on("internalSwapEvent", (data: ISwapEventData) => {
-            this.searchQueue.push(data);
+            console.log(`searchQueue length at EVENT : ${this.searchQueue.length}`);
+            // only add arb searches to the queue if there is not already a search queued for that pair or item.
+            // if multiple swaps come on the same arb pair come in in quick succession this stops duplicate checking
+            if(!this.searchQueue.some(item => item.pairName === data.pairName)){
+            //if (!this.searchQueue.includes(data)) {
+                //console.log(`XXXX queuing search for ${data.pairName}`);
+
+                // the push option put the next arb search at the bottom of the queue
+                this.searchQueue.push(data);
+                // an alternative is to use the unshift option to put the freshed arb check
+                // at the top of the array?? test and see which give best results
+                //this.searchQueue.unshift(data);
+
+            }
+
             if (!this.currentlySearching) {
                 this.searchForArbs();
             }

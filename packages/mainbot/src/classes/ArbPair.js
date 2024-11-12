@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ArbToken_1 = __importDefault(require("./ArbToken"));
 const PoolUV2_1 = __importDefault(require("./PoolUV2"));
+const PoolUV3_1 = __importDefault(require("./PoolUV3"));
 class ArbPair {
     constructor(PAIRDATA, _utils) {
         this.pools = [];
@@ -17,19 +18,22 @@ class ArbPair {
     async initialise(PAIRDATA) {
         await this.token0.initalise();
         await this.token1.initalise();
-        let pool = null;
         for (let i = 0; i < PAIRDATA["POOLS"].length; i++) {
+            let pool = null;
             switch (PAIRDATA["POOLS"][i]["PROTOCOL"]) {
                 case "UNISWAPV2":
-                    pool = new PoolUV2_1.default(this.toString(), PAIRDATA["POOLS"][i], this.utils.provider, this.utils.swapEmitter, this.utils.logger);
+                    pool = new PoolUV2_1.default(this.toString(), PAIRDATA["POOLS"][i], this.arbInputSizes, [this.token0.decimals, this.token1.decimals], this.utils);
                     break;
                 case "UNISWAPV3":
-                    console.log("uniswapv3 pools not yet developed");
+                    pool = new PoolUV3_1.default(this.toString(), PAIRDATA["POOLS"][i], this.arbInputSizes, [this.token0.decimals, this.token1.decimals], this.utils);
                     break;
-                case "KYBERCLASSIC":
-                    console.log("kyber classic pools not yet developed");
+                case "KYBERCLASSIC_STATIC":
+                    console.log("kyber classic static fee pools not yet developed");
                     break;
-                case "BALANCER":
+                case "KYBERCLASSIC_DYNAMIC":
+                    console.log("kyber classic dynamic fee pools not yet developed");
+                    break;
+                case "BALANCERV2":
                     console.log("balancer pools not yet developed");
                     break;
                 default:

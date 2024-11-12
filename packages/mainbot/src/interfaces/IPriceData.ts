@@ -1,6 +1,6 @@
 interface IPriceData {
     direction: string, 
-    amtIn: number,
+    amt: number,
     price: bigint
 }
 

@@ -38,6 +38,8 @@ export type { IntegrationUniswapV3 } from "./contracts/IntegrationUniswapV3";
 export { IntegrationUniswapV3__factory } from "./factories/contracts/IntegrationUniswapV3__factory";
 export type { Lock } from "./contracts/Lock";
 export { Lock__factory } from "./factories/contracts/Lock__factory";
+export type { Multicall } from "./contracts/Multicall";
+export { Multicall__factory } from "./factories/contracts/Multicall__factory";
 export type { Swapper } from "./contracts/Swapper";
 export { Swapper__factory } from "./factories/contracts/Swapper__factory";
 export type { Test } from "./contracts/Test";

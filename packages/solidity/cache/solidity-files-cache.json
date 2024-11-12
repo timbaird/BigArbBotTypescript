@@ -495,8 +495,8 @@
       ]
     },
     "/Users/tim/Documents/BLOCKCHAIN/BigArbBot/Bot/packages/solidity/contracts/IntegrationKyberClassic.sol": {
-      "lastModificationDate": 1731029923251,
-      "contentHash": "ffa7d4373928a1d6f09a7cf9731a7c4a",
+      "lastModificationDate": 1731037550314,
+      "contentHash": "2173bbe64377aabed87f0713e85d1a58",
       "sourceName": "contracts/IntegrationKyberClassic.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -679,6 +679,42 @@
       ],
       "artifacts": [
         "Lock"
+      ]
+    },
+    "/Users/tim/Documents/BLOCKCHAIN/BigArbBot/Bot/packages/solidity/contracts/Multicall.sol": {
+      "lastModificationDate": 1731288321910,
+      "contentHash": "74090c3cdff7e9270fe8d65b9a04ef4b",
+      "sourceName": "contracts/Multicall.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Multicall"
       ]
     }
   }
