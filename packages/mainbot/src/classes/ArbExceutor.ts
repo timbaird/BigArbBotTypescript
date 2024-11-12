@@ -8,7 +8,7 @@ import IPool from "../interfaces/IPool";
 
 class ArbExecutor{
     arbQueue: IArbExecutionParams[] = [];
-    currentlyExecutiing: boolean = false;
+    currentlyExecuting: boolean = false;
     utils: ArbUtilities;
 
     constructor(_utils: ArbUtilities, ) {
@@ -32,22 +32,22 @@ class ArbExecutor{
 
             }
 
-            if (!this.currentlyExecutiing) {
+            if (!this.currentlyExecuting) {
                 this.executeArbs();
             }
         });
     }
 
     async executeArbs(): Promise<void> {
-        this.currentlyExecutiing = true;
+        this.currentlyExecuting = true;
 
         while (this.arbQueue.length > 0) {
             const current: any = this.arbQueue.shift(); // takes the top element from the array to process it
-            console.log(`Executing Arb for ${current.amount} of ${current.token0.name}-${current.token1.name} on ${current.router0_addr} and ${current.router1_addr}`);
-            console.log(`NOT YET IMPLEMENTED OT LIVE`);
+            console.log(`DUMMY EXECUTING ARB for ${current.amountIn} of ${current.token0.symbol}-${current.token1.symbol} est profit: ${current.estimatedProfit}`);
+            //console.log(`NOT YET IMPLEMENTED OT LIVE`);
         }// end while loop
 
-        this.currentlyExecutiing = false;
+        this.currentlyExecuting = false;
     } // end function
 
 

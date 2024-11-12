@@ -86,7 +86,7 @@ class ArbFinder{
                                 }
 
                                 if (i_buy.price < j_sell.price) {
-                                    console.log(`potential_arb found for ${arbSize} | ${current.pairName} | ${pairToCheck.pools[i].name} | ${i_buy} => ${pairToCheck.pools[j].name} | ${j_sell}`);
+                                    console.log(`potential_arb found for ${arbSize} | ${current.pairName} | ${pairToCheck.pools[i].name} | ${i_buy.price} => ${pairToCheck.pools[j].name} | ${j_sell.price}`);
                                 
                                     const estimatedProfit = this.estimateProfit(i_buy.price, j_sell.price, arbSize);
                                     
@@ -103,7 +103,7 @@ class ArbFinder{
                                         }
                                     }
                                 } else if (j_buy.price < i_sell.price) {
-                                    console.log(`potential_arb found for ${arbSize} | ${current.pairName} | ${pairToCheck.pools[j].name} | ${j_buy} => ${pairToCheck.pools[i].name} | ${i_sell}`);
+                                    console.log(`potential_arb found for ${arbSize} | ${current.pairName} | ${pairToCheck.pools[j].name} | ${j_buy.price} => ${pairToCheck.pools[i].name} | ${i_sell.price}`);
                                 
                                     const estimatedProfit = this.estimateProfit(i_buy.price, j_sell.price, arbSize);
                                     
@@ -143,7 +143,11 @@ class ArbFinder{
 
 
     estimateProfit(buyPrice: number, sellPrice: number, amount: number) {
-        return (sellPrice - buyPrice) * amount; 
+        const buyAmount = amount / buyPrice;
+        const sellAmount = buyAmount * sellPrice;
+        const profit = sellAmount - amount;
+        //console.log(amount, buyPrice, buyAmount, sellPrice, sellAmount, profit);
+        return profit
     }
 
 } // end class
