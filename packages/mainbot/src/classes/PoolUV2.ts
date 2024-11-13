@@ -102,7 +102,7 @@ class PoolUV2 implements IPool{
         } finally {
             this.currentlyLoadingPrices = false;
         }
-        this.utils.logger.log("info", `POOLUV2.loadPrices completed - new price data loaded for ${this.name}`);
+        this.utils.logger.log("info", `POOLUV2.loadPrices completed - new price data loaded for ${this.name} priceData length: ${this.priceData.length}`);
 
         //just for validating price data has loaded correctly
         
