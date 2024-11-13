@@ -127,14 +127,6 @@
                     "FEE": 3000
                 },
                 {
-                    "PROTOCOL": "UNISWAPV2",
-                    "NAME": "*****DYFN",
-                    "FACTORY_ADDR": "0xE7Fb3e833eFE5F9c441105EB65Ef8b261266423B",
-                    "ROUTER_ADDR": "0xA102072A4C07F06EC3B4900FDC4C7B80b6c57429",
-                    "PAIR_ADDR": "0xC0ab47B79bC66F98e5C9eE5FF386a7150D3F4174",
-                    "FEE": 3000
-                },
-                {
                     "PROTOCOL": "UNISWAPV3",
                     "NAME": "UNISWAP_V3_3000",
                     "FACTORY_ADDR": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
