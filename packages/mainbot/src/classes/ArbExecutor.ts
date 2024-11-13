@@ -43,7 +43,7 @@ class ArbExecutor{
 
         while (this.arbQueue.length > 0) {
             const current: any = this.arbQueue.shift(); // takes the top element from the array to process it
-            this.utils.logger.log("info", `DUMMY EXECUTING ARB for ${current.amountIn} of ${current.token0.symbol}-${current.token1.symbol} | EST profit: ${current.estimatedProfit}`, true);
+            this.utils.logger.log("info", `****** DUMMY EXECUTING ARB for ${current.amountIn} of ${current.token0.symbol}-${current.token1.symbol} | EST profit: ${current.estimatedProfit}`, true);
 
             // simulating the arb execution taking some time
             await this.utils.wait(1000);

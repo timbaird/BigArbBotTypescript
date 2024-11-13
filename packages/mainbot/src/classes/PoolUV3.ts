@@ -67,8 +67,7 @@ class PoolUV3 implements IPool{
         this.pool = new Contract(this.pool_addr, UniswapV3PoolABI, _utils.provider);
         this.priceData = [];
 
-        this.utils.logger.log("info", `POOLUV3 constructor executed for ${this.name}`);
-        
+        this.utils.logger.log("info", `POOLUV3 constructor executed for ${this.name} - ${this.pairName}`);
     }
 
     async loadPrices(): Promise<void> {

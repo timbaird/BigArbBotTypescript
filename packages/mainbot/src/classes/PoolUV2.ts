@@ -41,7 +41,7 @@ class PoolUV2 implements IPool{
         this.router = new Contract(this.router_addr, RouterABI, this.utils.provider);
         this.pool = new Contract(this.pool_addr, UniswapV2PairABI, _utils.provider);
         this.priceData = [];
-        this.utils.logger.log("info", `POOLUV2.constructor : executed for ${this.name}`);
+        this.utils.logger.log("info", `POOLUV2.constructor : executed for ${this.name} - ${this.pairName}`);
     }
 
     async loadPrices(): Promise<void> {

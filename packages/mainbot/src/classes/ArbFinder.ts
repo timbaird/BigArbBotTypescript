@@ -46,7 +46,7 @@ class ArbFinder{
             try {
                 this.utils.logger.log("info", `searchQueue length at PRIOR to SHIFT : ${this.searchQueue.length}`);
                 const current: any = this.searchQueue.shift(); // takes the top element from the array to process it
-                this.utils.logger.log("info", `searchQueue length at AFTER to SHIFT : ${this.searchQueue.length}`);
+                this.utils.logger.log("info", `searchQueue length at AFTER SHIFT : ${this.searchQueue.length}`);
                 
                 const pairToCheck = this.pairs.find(pair => pair.toString() == current.pairName);
 

@@ -1,4 +1,4 @@
-import DATA from '../../../data/polygon/polygon_POSUSDCE_WETH_arb_data.json';
+import DATA from '../../../data/polygon/polygon_arb_data.json';
 
 // ################################
 // ################################

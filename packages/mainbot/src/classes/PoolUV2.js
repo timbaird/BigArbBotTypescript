@@ -24,7 +24,7 @@ class PoolUV2 {
         this.router = new ethers_1.Contract(this.router_addr, RouterABI, this.utils.provider);
         this.pool = new ethers_1.Contract(this.pool_addr, UniswapV2PairABI, _utils.provider);
         this.priceData = [];
-        this.utils.logger.log("info", `POOLUV2.constructor : executed for ${this.name}`);
+        this.utils.logger.log("info", `POOLUV2.constructor : executed for ${this.name} - ${this.pairName}`);
     }
     async loadPrices() {
         this.utils.logger.log("info", `POOLUV2.loadPrices called ${this.name}`);

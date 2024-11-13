@@ -14,6 +14,7 @@ class ArbPair {
         this.token1 = new ArbToken_1.default(PAIRDATA["TOKEN1"]["ADDRESS"], _utils);
         this.arbInputSizes = PAIRDATA["ARB_INPUT_SIZES"];
         this.utils = _utils;
+        this.utils.logger.log("info", `ArbPair.constructor : executed for ${PAIRDATA["TOKEN0"]["NAME"]}-${PAIRDATA["TOKEN1"]["NAME"]}`, true);
     }
     async initialise(PAIRDATA) {
         await this.token0.initalise();
@@ -29,13 +30,13 @@ class ArbPair {
                     break;
                 case "KYBERCLASSIC":
                     //pool = new PoolKyberClassic(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
-                    this.utils.logger.log("info", "kyber classic pools not yet finished");
+                    this.utils.logger.log("info", "ArbPair.initialise: kyber classic pools not yet finished");
                     break;
                 case "BALANCERV2":
-                    this.utils.logger.log("info", "balancer pools not yet developed");
+                    this.utils.logger.log("info", "ArbPair.initialise: balancer pools not yet developed");
                     break;
                 default:
-                    this.utils.logger.log("info", `pool protocol not recognised ${PAIRDATA["POOLS"][i]["NAME"]} ${PAIRDATA["POOLS"][i]["PROTOCOL"]}`, true);
+                    this.utils.logger.log("info", `ArbPair.initialise: pool protocol not recognised ${PAIRDATA["POOLS"][i]["NAME"]} ${PAIRDATA["POOLS"][i]["PROTOCOL"]}`, true);
             }
             if (pool !== null) {
                 pool.startSwapListener(this.utils.tracker);
@@ -43,7 +44,7 @@ class ArbPair {
                 this.pools.push(pool);
             }
         }
-        this.utils.logger.log("info", `Finished initialising pools for ${this.toString()}`, true);
+        this.utils.logger.log("info", `ArbPair.initialise: Finished initialising pools for ${this.toString()}`, true);
     }
     // this is what is treated as the pairname elsewhere
     toString() {
