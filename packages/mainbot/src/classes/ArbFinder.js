@@ -8,7 +8,7 @@ class ArbFinder {
         this.utils = _utils;
         this.pairs = _pairs;
         this.utils.swapEmitter.on("internalSwapEvent", (data) => {
-            this.utils.logger.log("info", `searchQueue length at EVENT : ${this.searchQueue.length}`);
+            //this.utils.logger.log("info", `searchQueue length at EVENT : ${this.searchQueue.length}`);
             // only add arb searches to the queue if there is not already a search queued for that pair or item.
             // if multiple swaps come on the same arb pair come in in quick succession this stops duplicate checking
             if (!this.searchQueue.some(item => item.pairName === data.pairName)) {
@@ -41,9 +41,9 @@ class ArbFinder {
         this.currentlySearching = true;
         while (this.searchQueue.length > 0) {
             try {
-                this.utils.logger.log("info", `searchQueue length at PRIOR to SHIFT : ${this.searchQueue.length}`);
+                //this.utils.logger.log("info", `searchQueue length at PRIOR to SHIFT : ${this.searchQueue.length}`);
                 const current = this.searchQueue.shift(); // takes the top element from the array to process it
-                this.utils.logger.log("info", `searchQueue length at AFTER SHIFT : ${this.searchQueue.length}`);
+                //this.utils.logger.log("info", `searchQueue length at AFTER SHIFT : ${this.searchQueue.length}`);
                 const pairToCheck = this.pairs.find(pair => pair.toString() == current.pairName);
                 if (pairToCheck == null || pairToCheck == undefined) {
                     throw new Error(`ArbFinder.searchForArbs : ${current.pairName} pair not found`);
@@ -111,7 +111,8 @@ class ArbFinder {
                                     }
                                 }
                                 else {
-                                    this.utils.logger.log("info", `No arb found for ${current.pairName} | ${pairToCheck.pools[i].name} | ${pairToCheck.pools[j].name} at ${arbSize}`);
+                                    // this log was overwhelming the log file (191000 line and 25 mb in 8 hours)
+                                    //this.utils.logger.log("info", `No arb found for ${current.pairName} | ${pairToCheck.pools[i].name} | ${pairToCheck.pools[j].name} at ${arbSize}`);
                                     // this inner loop should start with the lowest priced input sizes and work up
                                     // it is assumed that if there is no arb at the lowest input size, then there will be nor arbs at higher input prices
                                     // trying implementation of this for ALL pools in pair (2 loops out), not just between 2 pools

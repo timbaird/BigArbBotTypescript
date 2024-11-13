@@ -46,7 +46,7 @@ class PoolUV3 {
         this.utils.logger.log("info", `POOLUV3 constructor executed for ${this.name} - ${this.pairName} - gas oracle: ${this.isGasOracle}`);
     }
     async loadPrices() {
-        this.utils.logger.log("info", `POOLUV3.loadPrices called ${this.name}`);
+        //this.utils.logger.log("info", `POOLUV3.loadPrices called ${this.name}`);
         this.currentlyLoadingPrices = true;
         try {
             if (this.quoter_version == 1) {
@@ -74,7 +74,7 @@ class PoolUV3 {
         });
     }
     async loadPricesQuoter2() {
-        this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 called ${this.name}`);
+        //this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 called ${this.name}`);
         // reset existing priceData
         this.priceData.length = 0;
         // set up for the multicall
@@ -140,13 +140,11 @@ class PoolUV3 {
                 gasPrices.push(parseFloat(decodedOut[3]));
             }
         }
-        // const data: ISwapEventData = {pairName: this.pairName}
-        // this.utils.swapEmitter.emit("internalSwapEvent", data);
         if (this.isGasOracle) {
             const data = { estimate: Math.max(...gasPrices) };
             this.utils.gasEmitter.emit("newGasEstimate", data);
         }
-        this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 completed - new price data loaded for ${this.name}`);
+        //this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 completed - new price data loaded for ${this.name}`);
         //just for validating price data has loaded correctly
         // console.log(`PoolUV3 ${this.name} Quoter 2 price data loaded`);
         // for (let fuckyou = 0; fuckyou < this.priceData.length; fuckyou++){

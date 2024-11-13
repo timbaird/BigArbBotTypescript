@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {IntegrationUniswapV2} from "./IntegrationUniswapV2.sol";
-import {IntegrationUniswapV3} from "./IntegrationUniswapV3.sol";
-import {IntegrationKyberClassic} from "./IntegrationKyberClassic.sol";
-import {IntegrationBalancer} from "./IntegrationBalancer.sol";
+import {swapUniswapV2} from "./swapUniswapV2.sol";
+import {swapUniswapV3} from "./swapUniswapV3.sol";
+import {swapKyberClassic} from "./swapKyberClassic.sol";
+import {swapBalancer} from "./swapBalancer.sol";
 
 // designed to be inherrited by contracts that need to do swaps on uniswapv2
-abstract contract Swapper is IntegrationUniswapV2, IntegrationUniswapV3, IntegrationKyberClassic, IntegrationBalancer {
+abstract contract SwapIntegrator is swapUniswapV2, swapUniswapV3, swapKyberClassic, swapBalancer {
 
-    constructor() IntegrationUniswapV2() IntegrationUniswapV3() IntegrationKyberClassic() IntegrationBalancer() {}
+    constructor() swapUniswapV2() swapUniswapV3() swapKyberClassic() swapBalancer() {}
 
     function swapERC20 ( ) public returns (uint256){
 

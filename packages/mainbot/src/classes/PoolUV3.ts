@@ -74,7 +74,7 @@ class PoolUV3 implements IPool{
     }
 
     async loadPrices(): Promise<void> {
-        this.utils.logger.log("info", `POOLUV3.loadPrices called ${this.name}`);
+        //this.utils.logger.log("info", `POOLUV3.loadPrices called ${this.name}`);
         this.currentlyLoadingPrices = true;
         try {
             if (this.quoter_version == 1) {
@@ -100,7 +100,7 @@ class PoolUV3 implements IPool{
     }
 
     async loadPricesQuoter2(): Promise<void>{
-        this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 called ${this.name}`);
+        //this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 called ${this.name}`);
         // reset existing priceData
         this.priceData.length = 0;
 
@@ -185,16 +185,12 @@ class PoolUV3 implements IPool{
             }
         }
 
-        // const data: ISwapEventData = {pairName: this.pairName}
-        // this.utils.swapEmitter.emit("internalSwapEvent", data);
-
-
         if (this.isGasOracle) {
             const data: IGasEstimate = { estimate: Math.max(...gasPrices) };
             this.utils.gasEmitter.emit("newGasEstimate", data );
         }
             
-        this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 completed - new price data loaded for ${this.name}`);
+        //this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 completed - new price data loaded for ${this.name}`);
         
         //just for validating price data has loaded correctly
 
@@ -211,7 +207,6 @@ class PoolUV3 implements IPool{
     startSwapListener(_tracker: ListenerTracker) {        
         _tracker.addListener(this.name, this.pool, 'Swap', (sender, recipeint, amount0, amount1, sqrtPriceX96) => { this.handleSwapEvent(); })
         this.utils.logger.log('info',`POOLUV3.startSwapListener : starting listener on ${this.name}`);
-       
     }
 
     async handleSwapEvent(): Promise<void> {
