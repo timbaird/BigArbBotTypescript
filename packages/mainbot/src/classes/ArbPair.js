@@ -14,7 +14,8 @@ class ArbPair {
         this.token1 = new ArbToken_1.default(PAIRDATA["TOKEN1"]["ADDRESS"], _utils);
         this.arbInputSizes = PAIRDATA["ARB_INPUT_SIZES"];
         this.utils = _utils;
-        this.utils.logger.log("info", `ArbPair.constructor : executed for ${PAIRDATA["TOKEN0"]["NAME"]}-${PAIRDATA["TOKEN1"]["NAME"]}`, true);
+        this.isGasOracle = PAIRDATA["GASORACLE"];
+        this.utils.logger.log("info", `ArbPair.constructor : executed for ${PAIRDATA["TOKEN0"]["NAME"]}-${PAIRDATA["TOKEN1"]["NAME"]}`);
     }
     async initialise(PAIRDATA) {
         await this.token0.initalise();
@@ -26,7 +27,7 @@ class ArbPair {
                     pool = new PoolUV2_1.default(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
                     break;
                 case "UNISWAPV3":
-                    pool = new PoolUV3_1.default(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
+                    pool = new PoolUV3_1.default(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.isGasOracle, this.utils);
                     break;
                 case "KYBERCLASSIC":
                     //pool = new PoolKyberClassic(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);

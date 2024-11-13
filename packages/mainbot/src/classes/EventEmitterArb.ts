@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import IArbExecutionParams from '../interfaces/IArbExecutionParams';
 
-class ArbEventEmitter extends EventEmitter {
+class EventEmitterArb extends EventEmitter {
     emit(event: 'arbitrageDetected', data: IArbExecutionParams): boolean {
         return super.emit(event, data);
     }
@@ -12,4 +12,4 @@ class ArbEventEmitter extends EventEmitter {
 
 }
 
-export default ArbEventEmitter;
+export default EventEmitterArb;

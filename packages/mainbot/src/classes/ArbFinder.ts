@@ -1,16 +1,16 @@
-import IArbSearchParams from "../interfaces/IArbSearchParams"
 import IArbExecutionParams from "../interfaces/IArbExecutionParams";
 import ISwapEventData from "../interfaces/ISwapEventData";
 import ArbUtilities from "./ArbUtilities";
 import ArbPair from "./ArbPair";
 import IPriceData from "../interfaces/IPriceData";
-import IPool from "../interfaces/IPool";
+import IGasEstimate from "../interfaces/IGasEstimate";
 
 class ArbFinder{
     searchQueue: ISwapEventData[] = [];
     currentlySearching: boolean = false;
     utils: ArbUtilities;
     pairs: ArbPair[];
+    gasEstimate: number = 0;  // denominated in wei
 
     constructor(_pairs: ArbPair[], _utils: ArbUtilities, ) {
         this.utils = _utils;
@@ -36,9 +36,25 @@ class ArbFinder{
                 this.utils.logger.log("info", `ArbFinder : already searching, not re-initiated`);
             }
         });
+
+        this.utils.gasEmitter.on("newGasEstimate", (data: IGasEstimate) => {
+            // this functionality is in place for future development
+            // for the moment on polygon the gas is so negligent that
+            // it isn't worth inclduing in calculation
+
+            //this.gasEstimate = data.estimate;
+
+            // static for use on polygon which typically has < 1 cent gas cost on token transfer
+            this.gasEstimate = 0.01;
+
+            // USD - eth based pairs are used as gas oracles
+            // any gas estimates coming in should only be based on a usd weth based pair
+            //this.utils.logger.log("info", `ArbFinder : gasEstimate update event recieved`);
+        })
     }
 
     async searchForArbs(): Promise<void> {
+
         this.currentlySearching = true;
 
         while (this.searchQueue.length > 0) {
@@ -57,9 +73,6 @@ class ArbFinder{
                     const aest = new Date().toLocaleString();
                     this.utils.logger.log("info", `checking for arbs on ${pairToCheck.toString()} at ${aest}`);
 
-                    // an alternatie implementation of this is commented out
-                    // just outside the inner loop
-                    // this positioning looks for best arb in entire pair, no just between 2 pools
                     let mostProfitableArb: IArbExecutionParams | null = null;
 
                     // for each combination of pools in the pair
@@ -77,10 +90,6 @@ class ArbFinder{
                             if (prices_i.length !== prices_j.length) {
                                 throw new Error(`ArbFinder.searchForArbs : Invalid price data LENGTHs - pair ${current.pairName} : pools ${pairToCheck.pools[i].name} | ${prices_i.length} | ${pairToCheck.pools[j].name} | ${prices_j.length}`);
                             }
-
-                            // this looks for most profitable arb in a given two pools, no amongst all pool
-                            // trying alternate implementation for all pools in the pair (out a couple of loops)
-                            //let mostProfitableArb: IArbExecutionParams | null = null;
                             
                             // this should start with the lowest priced input size and work up
                             for (let k = 0; k < pairToCheck.arbInputSizes.length; k++) {
@@ -97,9 +106,10 @@ class ArbFinder{
                                 }
 
                                 if (i_buy.price < j_sell.price) {
+                                    // estimated profit take gas into consideration
                                     const estimatedProfit = this.estimateProfit(i_buy.price, j_sell.price, arbSize);
                                     
-                                    if (mostProfitableArb === null || mostProfitableArb["estimatedProfit"] < estimatedProfit) {
+                                    if (estimatedProfit > 0 && (mostProfitableArb === null || mostProfitableArb["estimatedProfit"] < estimatedProfit)) {
                                         this.utils.logger.log("info", `ArbFinder.searchForArbs:(first or better) arb found for ${arbSize} | ${current.pairName} | ${pairToCheck.pools[i].name} | ${i_buy.price} => ${pairToCheck.pools[j].name} | ${j_sell.price} | est profit: ${estimatedProfit}`);
                                         mostProfitableArb = {
                                             token0: pairToCheck.pools[i].tokens[0],
@@ -113,9 +123,12 @@ class ArbFinder{
                                         }
                                     }
                                 } else if (j_buy.price < i_sell.price) {
+
+                                    // estimated profit take gas into consideration
                                     const estimatedProfit = this.estimateProfit(j_buy.price, i_sell.price, arbSize);
                                     
-                                    if (mostProfitableArb === null || mostProfitableArb["estimatedProfit"] < estimatedProfit) {
+                                    // possibly change the etimated profit condition to a data base parameter rather than 0 in the future
+                                    if (estimatedProfit > 0 && (mostProfitableArb === null || mostProfitableArb["estimatedProfit"] < estimatedProfit)) {
                                         this.utils.logger.log("info", `ArbFinder.searchForArbs: (first or better) arb found for ${arbSize} | ${current.pairName} | ${pairToCheck.pools[j].name} | ${j_buy.price} => ${pairToCheck.pools[i].name} | ${i_sell.price}| est profit: ${estimatedProfit}`);
                                         mostProfitableArb = {
                                             token0: pairToCheck.pools[i].tokens[0],
@@ -126,10 +139,8 @@ class ArbFinder{
                                             router1_addr: pairToCheck.pools[i].router_addr,
                                             amountIn: arbSize,
                                             estimatedProfit: estimatedProfit
-                                        
                                         }
                                     }
-                                        
                                 } else {
                                     this.utils.logger.log("info", `No arb found for ${current.pairName} | ${pairToCheck.pools[i].name} | ${pairToCheck.pools[j].name} at ${arbSize}`);
                                     // this inner loop should start with the lowest priced input sizes and work up
@@ -145,18 +156,17 @@ class ArbFinder{
                         this.utils.arbEmitter.emit('arbitrageDetected', mostProfitableArb);
                 }
             } catch (ex: any) {
-                this.utils.logger.log("info", ex.message, true);
+                this.utils.logger.log("info", `ArbFinder.searchForArbs : ${ex.message}`, true);
             }
 
         }// end while loop
         this.currentlySearching = false;
     } // end function
 
-
     estimateProfit(buyPrice: number, sellPrice: number, amount: number) {
         const buyAmount = amount / buyPrice;
         const sellAmount = buyAmount * sellPrice;
-        const profit = sellAmount - amount;
+        const profit = sellAmount - (amount + (2 * this.gasEstimate));
         this.utils.logger.log("info", `ArbFinder.estimateProfit : amountIn: ${amount}, buyPrice : ${buyPrice}, amountBought: ${buyAmount}, sellPrice: ${sellPrice}, Amount returned from sale: ${sellAmount}, estProfit ${profit}`);
         return profit
     }

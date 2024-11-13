@@ -12,6 +12,7 @@ import IQuoteExactInputSingleParams from "../interfaces/IQuoteExactInputSinglePa
 import IQuoteExactOutputSingleParams from "../interfaces/IQuoteExactOutputSingleParams";
 import ArbUtilities from "./ArbUtilities";
 import ArbToken from "./ArbToken";
+import IGasEstimate from "../interfaces/IGasEstimate";
 
 const { abi: UniswapV3PoolABI } = UniswapV3Pool;
 
@@ -32,9 +33,10 @@ class PoolUV3 implements IPool{
     arbInputSizes: number[];
     priceData: IPriceData[];
     utils: ArbUtilities;
+    isGasOracle: boolean;
     currentlyLoadingPrices: Boolean = false;
 
-    constructor(_pairName: string, DATA: any, _tokens: ArbToken[], _arbInputSizes: number[], _utils:ArbUtilities) {
+    constructor(_pairName: string, DATA: any, _tokens: ArbToken[], _arbInputSizes: number[], _isGasOracle:boolean, _utils:ArbUtilities) {
         this.pairName = _pairName;
         this.name = DATA["NAME"];
         this.factory_addr = DATA["FACTORY_ADDR"];
@@ -66,8 +68,9 @@ class PoolUV3 implements IPool{
 
         this.pool = new Contract(this.pool_addr, UniswapV3PoolABI, _utils.provider);
         this.priceData = [];
+        this.isGasOracle = _isGasOracle;
 
-        this.utils.logger.log("info", `POOLUV3 constructor executed for ${this.name} - ${this.pairName}`);
+        this.utils.logger.log("info", `POOLUV3 constructor executed for ${this.name} - ${this.pairName} - gas oracle: ${this.isGasOracle}`);
     }
 
     async loadPrices(): Promise<void> {
@@ -82,7 +85,7 @@ class PoolUV3 implements IPool{
                 throw new Error(`POOLUV3.loadPrices: Invalid quoter version in ${this.name} - ${this.pairName}`)
             }
         } catch (ex: any) {
-            this.utils.logger.log("info", ex.message, true);
+            this.utils.logger.log("info", `POOLUV3.loadPrices: ${ex.message}`, true);
         } finally {
             this.currentlyLoadingPrices = false;
         }
@@ -105,6 +108,8 @@ class PoolUV3 implements IPool{
         const data: any[] = [];
         const targets: string[] = [];
         let amt: bigint;
+        const gasPrices: number[] = [];
+        let lowSellprice: number = 0;
 
         // for each of the arb Input Sizes we are tracking
         for (let i = 0; i < this.arbInputSizes.length; i++){
@@ -170,8 +175,25 @@ class PoolUV3 implements IPool{
             this.priceData.push({ "direction": "BUY", "amt": amt, "price": priceIn });
             this.priceData.push({ "direction": "SELL", "amt": amt, "price": priceOut });
 
+            // use the lowest quoted amount for gas price estimation
+            if (i == 0)
+                lowSellprice = priceOut;
+
+            if (this.isGasOracle) {
+                gasPrices.push(parseFloat(decodedIn[3]))
+                gasPrices.push(parseFloat(decodedOut[3]));
+            }
         }
 
+        // const data: ISwapEventData = {pairName: this.pairName}
+        // this.utils.swapEmitter.emit("internalSwapEvent", data);
+
+
+        if (this.isGasOracle) {
+            const data: IGasEstimate = { estimate: Math.max(...gasPrices) };
+            this.utils.gasEmitter.emit("newGasEstimate", data );
+        }
+            
         this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 completed - new price data loaded for ${this.name}`);
         
         //just for validating price data has loaded correctly
@@ -186,8 +208,7 @@ class PoolUV3 implements IPool{
         return this.priceData;        
     }
 
-    startSwapListener(_tracker: ListenerTracker) {
-        
+    startSwapListener(_tracker: ListenerTracker) {        
         _tracker.addListener(this.name, this.pool, 'Swap', (sender, recipeint, amount0, amount1, sqrtPriceX96) => { this.handleSwapEvent(); })
         this.utils.logger.log('info',`POOLUV3.startSwapListener : starting listener on ${this.name}`);
        

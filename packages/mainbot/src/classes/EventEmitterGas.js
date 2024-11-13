@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const events_1 = require("events");
-class SwapEventEmitter extends events_1.EventEmitter {
+class EventEmitterGas extends events_1.EventEmitter {
     emit(event, data) {
         return super.emit(event, data);
     }
@@ -9,4 +9,4 @@ class SwapEventEmitter extends events_1.EventEmitter {
         return super.on(event, listener);
     }
 }
-exports.default = SwapEventEmitter;
+exports.default = EventEmitterGas;

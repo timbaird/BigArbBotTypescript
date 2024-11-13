@@ -11,7 +11,7 @@ const QuoterV2_json_1 = __importDefault(require("@uniswap/v3-periphery/artifacts
 const { abi: Quoter2ABI } = QuoterV2_json_1.default;
 const { abi: UniswapV3PoolABI } = UniswapV3Pool_json_1.default;
 class PoolUV3 {
-    constructor(_pairName, DATA, _tokens, _arbInputSizes, _utils) {
+    constructor(_pairName, DATA, _tokens, _arbInputSizes, _isGasOracle, _utils) {
         this.protocol = "UNISWAPV3";
         this.currentlyLoadingPrices = false;
         this.pairName = _pairName;
@@ -42,7 +42,8 @@ class PoolUV3 {
         this.arbInputSizes = _arbInputSizes;
         this.pool = new ethers_1.Contract(this.pool_addr, UniswapV3PoolABI, _utils.provider);
         this.priceData = [];
-        this.utils.logger.log("info", `POOLUV3 constructor executed for ${this.name} - ${this.pairName}`);
+        this.isGasOracle = _isGasOracle;
+        this.utils.logger.log("info", `POOLUV3 constructor executed for ${this.name} - ${this.pairName} - gas oracle: ${this.isGasOracle}`);
     }
     async loadPrices() {
         this.utils.logger.log("info", `POOLUV3.loadPrices called ${this.name}`);
@@ -59,7 +60,7 @@ class PoolUV3 {
             }
         }
         catch (ex) {
-            this.utils.logger.log("info", ex.message, true);
+            this.utils.logger.log("info", `POOLUV3.loadPrices: ${ex.message}`, true);
         }
         finally {
             this.currentlyLoadingPrices = false;
@@ -80,6 +81,8 @@ class PoolUV3 {
         const data = [];
         const targets = [];
         let amt;
+        const gasPrices = [];
+        let lowSellprice = 0;
         // for each of the arb Input Sizes we are tracking
         for (let i = 0; i < this.arbInputSizes.length; i++) {
             amt = (0, ethers_1.parseUnits)(this.arbInputSizes[i].toString(), this.tokens[0].decimals);
@@ -129,6 +132,19 @@ class PoolUV3 {
             const priceOut = (parseFloat(amt.toString()) / parseFloat(decodedOut[0].toString())) * parseFloat(decimalShift.toString());
             this.priceData.push({ "direction": "BUY", "amt": amt, "price": priceIn });
             this.priceData.push({ "direction": "SELL", "amt": amt, "price": priceOut });
+            // use the lowest quoted amount for gas price estimation
+            if (i == 0)
+                lowSellprice = priceOut;
+            if (this.isGasOracle) {
+                gasPrices.push(parseFloat(decodedIn[3]));
+                gasPrices.push(parseFloat(decodedOut[3]));
+            }
+        }
+        // const data: ISwapEventData = {pairName: this.pairName}
+        // this.utils.swapEmitter.emit("internalSwapEvent", data);
+        if (this.isGasOracle) {
+            const data = { estimate: Math.max(...gasPrices) };
+            this.utils.gasEmitter.emit("newGasEstimate", data);
         }
         this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 completed - new price data loaded for ${this.name}`);
         //just for validating price data has loaded correctly

@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import ISwapEventData from '../interfaces/ISwapEventData';
 import IArbEventData from '../interfaces/IArbData';
 
-class SwapEventEmitter extends EventEmitter {
+class EventEmitterSwap extends EventEmitter {
     emit(event: 'internalSwapEvent', data: ISwapEventData): boolean {
         return super.emit(event, data);
     }
@@ -16,4 +16,4 @@ class SwapEventEmitter extends EventEmitter {
     // }
 }
 
-export default SwapEventEmitter;
+export default EventEmitterSwap;
