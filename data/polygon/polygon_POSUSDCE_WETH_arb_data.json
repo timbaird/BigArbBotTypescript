@@ -1,5 +1,6 @@
 {    
     "LIVE": "true",
+    "DEBUGMODE": false,
     "WEBSOCKET": "wss://polygon-mainnet.infura.io/ws/v3/",
     "BLOCKCHAIN": "POLYGON",
     "CHAINID" : 137,
@@ -18,7 +19,7 @@
                 "ADDRESS": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
                 "DECIMAL_PLACES": 18
             },
-            "ARB_INPUT_SIZES": [1, 5, 10, 20, 50],
+            "ARB_INPUT_SIZES": [20, 50, 100, 200, 500],
             "POOLS":[   
                 {
                     "PROTOCOL": "UNISWAPV2",

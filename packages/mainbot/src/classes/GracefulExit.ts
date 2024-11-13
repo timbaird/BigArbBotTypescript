@@ -33,32 +33,32 @@ class GracefulExit {
                 await GracefulExit.shutdown(_utils);
             });
         }
+        _utils.logger.log("info", "GracefulExit: setup executed");
     }
 
     static async shutdown(_utils: ArbUtilities): Promise<void> {
         // Shutdown all listeners on exchanges
-        console.log('############### GRACEFUL SHUTDOWN COMMENCED ###############');
+        _utils.logger.log('info', '############### GRACEFUL SHUTDOWN COMMENCED ###############', true);
         try {
             await _utils.tracker.removeAllListeners();
         } catch (ex) {
-            console.log(`error removing pair listeners : ${(ex as Error).message}`);
+            _utils.logger.log('info', `GracefulExit.shutdown: error removing pair listeners : ${(ex as Error).message}`, true);
         }
 
         try {
             process.removeAllListeners();
         } catch (ex) {
-            console.log(`error removing process listeners : ${(ex as Error).message}`);
+            _utils.logger.log('info', `GracefulExit.shutdown: error removing process listeners : ${(ex as Error).message}`, true);
         }
 
         try {
             _utils.provider.websocket.close();
         } catch (ex) {
-            console.log(`error closing provider.WEBSOCKET : ${(ex as Error).message}`);
+            _utils.logger.log('info', `GracefulExit.shutdown: error closing provider.WEBSOCKET : ${(ex as Error).message}`, true);
         }
                            
-        _utils.logger.log('info', '################### SHUTDOWN COMPLETE #####################');
         setTimeout(() => {
-            console.log('\n################### SHUTDOWN COMPLETE #####################');
+            _utils.logger.log('info', '################### SHUTDOWN COMPLETE #####################', true);
         }, 2500);
         setTimeout(process.exit, 2500);
     }

@@ -24,8 +24,10 @@ class PoolUV2 {
         this.router = new ethers_1.Contract(this.router_addr, RouterABI, this.utils.provider);
         this.pool = new ethers_1.Contract(this.pool_addr, UniswapV2PairABI, _utils.provider);
         this.priceData = [];
+        this.utils.logger.log("info", `POOLUV2.constructor : executed for ${this.name}`);
     }
     async loadPrices() {
+        this.utils.logger.log("info", `POOLUV2.loadPrices called ${this.name}`);
         this.currentlyLoadingPrices = true;
         try {
             // reset existing priceData
@@ -60,7 +62,6 @@ class PoolUV2 {
                 else {
                     amt = this.arbInputSizes[(i - 1) / 2];
                 }
-                //console.log(`${typeof(10n)} - ${typeof (this.tokenDecimals[1])} `);
                 const decimalShift = 10n ** BigInt(this.tokens[1].decimals);
                 const priceIn = (parseFloat(amt.toString()) / parseFloat(decodedIn[0][1].toString())) * parseFloat(decimalShift.toString());
                 const priceOut = (parseFloat(amt.toString()) / parseFloat(decodedOut[0][0].toString())) * parseFloat(decimalShift.toString());
@@ -73,6 +74,7 @@ class PoolUV2 {
         finally {
             this.currentlyLoadingPrices = false;
         }
+        this.utils.logger.log("info", `POOLUV2.loadPrices completed - new price data loaded for ${this.name}`);
         //just for validating price data has loaded correctly
         // console.log(`PoolUV2 ${this.name} RouterV2 price data loaded`);
         // for (let fuckyou = 0; fuckyou < this.priceData.length; fuckyou++){
@@ -84,12 +86,11 @@ class PoolUV2 {
     }
     startSwapListener(_tracker) {
         _tracker.addListener(this.name, this.pool, 'Swap', (sender, amount0In, amount1In, amount0Out, amount1Out, to) => { this.handleSwapEvent(); });
-        this.utils.logger.log('info', `starting listener on ${this.name}`);
+        this.utils.logger.log('info', `POOLUV2.startSwapListener : starting listener on ${this.name}`);
     }
     async handleSwapEvent() {
         const aest = new Date().toLocaleString();
-        //console.log(`SWAP event detected on ${this.name} at ${aest}`);
-        this.utils.logger.log('info', `SWAP event detected on ${this.name} at ${aest}`);
+        this.utils.logger.log("info", `POOLUV2: SWAP event detected on ${this.name} at ${aest}`);
         if (!this.currentlyLoadingPrices)
             await this.loadPrices();
         const data = { pairName: this.pairName };

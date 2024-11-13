@@ -15,14 +15,15 @@ class ArbUtilities{
     arbEmitter: ArbEventEmitter;
     multicall: Contract; 
 
-    constructor(_webSocket: string, _apiKey:string, _multicall_addr: string) {
+    constructor(_webSocket: string, _apiKey:string, _multicall_addr: string, _debug: boolean,  _logFileName:string, ) {
         
         this.provider = new WebSocketProvider(_webSocket + _apiKey);
-        this.logger = new ArbLogger("TEST_LOG xxxxxx", "../../../logs/");
+        this.logger = new ArbLogger(_logFileName, "../../../logs/", _debug);
         this.tracker = new ListenerTracker(this.logger);
         this.swapEmitter = new SwapEventEmitter();
         this.arbEmitter = new ArbEventEmitter();
         this.multicall = new Contract(_multicall_addr, MulticallABI, this.provider);
+        this.logger.log("info", "ArbUtilities: constructor executed");
     }
 
     wait (ms: number): Promise<void> {

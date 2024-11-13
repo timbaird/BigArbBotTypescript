@@ -16,7 +16,7 @@ class ArbExecutor{
 
 
         this.utils.arbEmitter.on("arbitrageDetected", (data: IArbExecutionParams) => {
-            //console.log(`searchQueue length at EVENT : ${this.searchQueue.length}`);
+            this.utils.logger.log("info", `arbQueue length at EVENT : ${this.arbQueue.length}`);
             // only add arb searches to the queue if there is not already a search queued for that pair or item.
             // if multiple swaps come on the same arb pair come in in quick succession this stops duplicate checking
             if (!this.arbQueue.some(item => item.router0_addr === data.router0_addr &&
@@ -43,15 +43,16 @@ class ArbExecutor{
 
         while (this.arbQueue.length > 0) {
             const current: any = this.arbQueue.shift(); // takes the top element from the array to process it
-            console.log(`DUMMY EXECUTING ARB for ${current.amountIn} of ${current.token0.symbol}-${current.token1.symbol} est profit: ${current.estimatedProfit}`);
-            //console.log(`NOT YET IMPLEMENTED OT LIVE`);
+            this.utils.logger.log("info", `DUMMY EXECUTING ARB for ${current.amountIn} of ${current.token0.symbol}-${current.token1.symbol} | EST profit: ${current.estimatedProfit}`, true);
+
+            // simulating the arb execution taking some time
+            await this.utils.wait(1000);
+
+            
         }// end while loop
 
         this.currentlyExecuting = false;
     } // end function
-
-
-
 
 } // end class
 

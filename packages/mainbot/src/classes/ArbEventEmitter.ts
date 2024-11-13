@@ -10,9 +10,6 @@ class ArbEventEmitter extends EventEmitter {
         return super.on(event, listener);
     }
 
-    // on(event: 'arbFoundEvent', listener: (data: IArbEventData) => void): this {
-    //     return super.on(event, listener);
-    // }
 }
 
 export default ArbEventEmitter;

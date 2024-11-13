@@ -29,13 +29,13 @@ class ArbPair {
                     break;
                 case "KYBERCLASSIC":
                     //pool = new PoolKyberClassic(this.toString(), PAIRDATA["POOLS"][i], [this.token0, this.token1], this.arbInputSizes, this.utils);
-                    console.log("kyber classic pools not yet finished");
+                    this.utils.logger.log("info", "kyber classic pools not yet finished");
                     break;
                 case "BALANCERV2":
-                    console.log("balancer pools not yet developed");
+                    this.utils.logger.log("info", "balancer pools not yet developed");
                     break;
                 default:
-                    console.log(`pool protocol not recognised ${PAIRDATA["POOLS"][i]["NAME"]} ${PAIRDATA["POOLS"][i]["PROTOCOL"]}`);
+                    this.utils.logger.log("info", `pool protocol not recognised ${PAIRDATA["POOLS"][i]["NAME"]} ${PAIRDATA["POOLS"][i]["PROTOCOL"]}`, true);
             }
             if (pool !== null) {
                 pool.startSwapListener(this.utils.tracker);
@@ -43,7 +43,7 @@ class ArbPair {
                 this.pools.push(pool);
             }
         }
-        console.log(`Finished initialising pools for ${this.toString()}`);
+        this.utils.logger.log("info", `Finished initialising pools for ${this.toString()}`, true);
     }
     // this is what is treated as the pairname elsewhere
     toString() {

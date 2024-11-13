@@ -24,7 +24,6 @@ class ArbToken{
             })
 
         } catch (ex: any) {
-            console.log(ex.message);
             throw ex;
         }
     }

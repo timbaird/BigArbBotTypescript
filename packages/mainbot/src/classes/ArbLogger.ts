@@ -1,10 +1,15 @@
+import { boolean } from 'hardhat/internal/core/params/argumentTypes';
 import { createLogger, transports, format, Logger, transport } from 'winston';
 
 class ArbLogger {
     baseLogger: Logger;
+    debug: boolean;
 
-    constructor(_pairName: string, _logDir: string) {
-        const fileName = `${_logDir}${_pairName}.log`;
+    constructor(_pairName: string, _logDir: string, _debug: boolean) {
+        this.debug = _debug;
+        const formattedDate = this.getFormattedDate()
+
+        const fileName = `${_logDir}${_pairName}_${formattedDate}.log`;
 
         this.baseLogger = createLogger({
             format: format.combine(format.timestamp(), format.json()),
@@ -23,9 +28,19 @@ class ArbLogger {
         }
     }
 
-    log(level: string, message: string): void {
+    log(level: string, message: string, overrideDebug:boolean = false): void {
         this.baseLogger.log({ level, message });
+        this.debug || overrideDebug ? console.log(message) : null;
     }
+
+    getFormattedDate(): string {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so we add 1
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}_${month}_${day}`;
+    }
+
 }
 
 export default ArbLogger;

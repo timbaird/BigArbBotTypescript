@@ -23,7 +23,6 @@ class ArbToken {
             });
         }
         catch (ex) {
-            console.log(ex.message);
             throw ex;
         }
     }
