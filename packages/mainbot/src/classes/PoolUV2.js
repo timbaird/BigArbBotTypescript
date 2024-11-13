@@ -74,7 +74,7 @@ class PoolUV2 {
         finally {
             this.currentlyLoadingPrices = false;
         }
-        this.utils.logger.log("info", `POOLUV2.loadPrices completed - new price data loaded for ${this.name}`);
+        this.utils.logger.log("info", `POOLUV2.loadPrices completed - new price data loaded for ${this.name} priceData length: ${this.priceData.length}`);
         //just for validating price data has loaded correctly
         // console.log(`PoolUV2 ${this.name} RouterV2 price data loaded`);
         // for (let fuckyou = 0; fuckyou < this.priceData.length; fuckyou++){
