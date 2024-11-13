@@ -13,7 +13,7 @@ const INFURA_API_KEY: string = vars.get("INFURA_API_KEY");
 async function main(DATA: any): Promise<void>{
     
     const utils = new ArbUtilities(DATA["WEBSOCKET"], INFURA_API_KEY, DATA["MULTICALL_ADDR"], DATA["DEBUGMODE"], DATA["BLOCKCHAIN"]);
-    utils.logger.log("info", '################## APPLICATION STARTED ####################', true);
+    utils.logger.log("info", `############## ${DATA["BLOCKCHAIN"]} APP STARTED ################`, true);
     
     // graceful exits sets up script so it can be exited gracefully witg CTRL^C
     GracefulExit.setUp(utils);

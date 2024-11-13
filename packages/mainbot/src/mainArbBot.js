@@ -14,7 +14,7 @@ const ArbExecutor_1 = __importDefault(require("./classes/ArbExecutor"));
 const INFURA_API_KEY = config_1.vars.get("INFURA_API_KEY");
 async function main(DATA) {
     const utils = new ArbUtilities_1.default(DATA["WEBSOCKET"], INFURA_API_KEY, DATA["MULTICALL_ADDR"], DATA["DEBUGMODE"], DATA["BLOCKCHAIN"]);
-    utils.logger.log("info", '################## APPLICATION STARTED ####################', true);
+    utils.logger.log("info", `############## ${DATA["BLOCKCHAIN"]} APP STARTED ################`, true);
     // graceful exits sets up script so it can be exited gracefully witg CTRL^C
     GracefulExit_1.default.setUp(utils);
     const pairs = [];
