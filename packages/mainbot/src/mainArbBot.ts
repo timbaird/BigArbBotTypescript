@@ -11,7 +11,7 @@ import ArbExecutor from "./classes/ArbExecutor";
 const INFURA_API_KEY: string = vars.get("INFURA_API_KEY");
 
 async function main(DATA: any): Promise<void>{
-    
+    console.clear();
     const utils = new ArbUtilities(DATA["WEBSOCKET"], INFURA_API_KEY, DATA["MULTICALL_ADDR"], DATA["DEBUGMODE"], DATA["BLOCKCHAIN"]);
     utils.logger.log("info", `############## ${DATA["BLOCKCHAIN"]} APP STARTED ################`, true);
     
