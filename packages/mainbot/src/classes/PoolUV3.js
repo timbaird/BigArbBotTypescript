@@ -74,23 +74,26 @@ class PoolUV3 {
         });
     }
     async loadPricesQuoter2() {
-        //this.utils.logger.log("info", `POOLUV3.loadPricesQuoter2 called ${this.name}`);
         // reset existing priceData
         this.priceData.length = 0;
         // set up for the multicall
-        const data = [];
-        const targets = [];
-        let amt;
+        const targets = []; // the addresses the multicall functions are being directed to
+        const data = []; // the necoded function data for each function
+        let amt; // human readable - token0 amount in / out depending on whether see side ot buy side
+        let parsedAmt; // bigint / wei - token0 amount in / out depending on whether see side ot buy side
+        // used for gas estimation - only relevant to UV3 with quoter2
         const gasPrices = [];
-        let lowSellprice = 0;
         // for each of the arb Input Sizes we are tracking
         for (let i = 0; i < this.arbInputSizes.length; i++) {
-            amt = (0, ethers_1.parseUnits)(this.arbInputSizes[i].toString(), this.tokens[0].decimals);
+            // get the amount
+            amt = this.arbInputSizes[i];
+            // parse the amount to wei
+            parsedAmt = (0, ethers_1.parseUnits)(amt.toString(), this.tokens[0].decimals);
             // set up params for getting the price to buy token 1 (denominated in token0)
             const paramsIn = {
                 tokenIn: this.tokens[0].address,
                 tokenOut: this.tokens[1].address,
-                amountIn: amt,
+                amountIn: parsedAmt,
                 fee: this.fee.toString(),
                 sqrtPriceLimitX96: '0'
             };
@@ -101,7 +104,7 @@ class PoolUV3 {
             const paramsOut = {
                 tokenIn: this.tokens[1].address,
                 tokenOut: this.tokens[0].address,
-                amount: amt,
+                amount: parsedAmt,
                 fee: this.fee.toString(),
                 sqrtPriceLimitX96: '0'
             };
@@ -122,6 +125,7 @@ class PoolUV3 {
             else {
                 amt = this.arbInputSizes[(i - 1) / 2];
             }
+            parsedAmt = (0, ethers_1.parseUnits)(amt.toString(), this.tokens[0].decimals);
             // data comes out in following format
             // index 0 => uint256 either amountIn or AmountOut depending on which funciton was called
             // index 1 => uint160 sqrtPriceX96After
@@ -130,11 +134,8 @@ class PoolUV3 {
             const decimalShift = 10n ** BigInt(this.tokens[1].decimals);
             const priceIn = (parseFloat(amt.toString()) / parseFloat(decodedIn[0].toString())) * parseFloat(decimalShift.toString());
             const priceOut = (parseFloat(amt.toString()) / parseFloat(decodedOut[0].toString())) * parseFloat(decimalShift.toString());
-            this.priceData.push({ "direction": "BUY", "amt": amt, "price": priceIn });
-            this.priceData.push({ "direction": "SELL", "amt": amt, "price": priceOut });
-            // use the lowest quoted amount for gas price estimation
-            if (i == 0)
-                lowSellprice = priceOut;
+            this.priceData.push({ "direction": "BUY", "token0Amt": amt, "token0AmtWei": parsedAmt, "token1AmtWei": decodedIn[0], "price": priceIn });
+            this.priceData.push({ "direction": "SELL", "token0Amt": amt, "token0AmtWei": parsedAmt, "token1AmtWei": decodedOut[0], "price": priceOut });
             if (this.isGasOracle) {
                 gasPrices.push(parseFloat(decodedIn[3]));
                 gasPrices.push(parseFloat(decodedOut[3]));
@@ -155,7 +156,7 @@ class PoolUV3 {
         return this.priceData;
     }
     startSwapListener(_tracker) {
-        _tracker.addListener(this.name, this.pool, 'Swap', (sender, recipeint, amount0, amount1, sqrtPriceX96) => { this.handleSwapEvent(); });
+        _tracker.addListener(this.pairName, this.name, this.pool, 'Swap', (sender, recipeint, amount0, amount1, sqrtPriceX96) => { this.handleSwapEvent(); });
         this.utils.logger.log('info', `POOLUV3.startSwapListener : starting listener on ${this.name}`);
     }
     async handleSwapEvent() {

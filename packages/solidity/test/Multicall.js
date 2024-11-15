@@ -35,29 +35,6 @@ describe("Multicall", function () {
         return { Multicall, provider, POOL_ADDRESS, poolContract, quoter2Addr, quoter2Contract, POSUSDCE, WETH, ARB_INPUT_SIZES, owner, otherAccount };
     }
     describe("multicall", function () {
-        /*
-        it("Calls Pools", async function () {
-            const { Multicall, provider, POOL_ADDRESS, poolContract, quoter2Addr, quoter2Contract, owner, otherAccount } = await loadFixture(testFixture);
-            
-            const encoded1: any = poolContract.interface.encodeFunctionData("liquidity");
-            const encoded2: string = poolContract.interface.encodeFunctionData("slot0");
-
-            const targets: string[] = [POOL_ADDRESS, POOL_ADDRESS];
-            const data: any[] = [encoded1, encoded2];
-
-            const result: string[] = await Multicall.multicall.staticCall(targets, data);
-
-            const decodedLiq = poolContract.interface.decodeFunctionResult("liquidity", result[0]);
-            const decodedSlot0 = poolContract.interface.decodeFunctionResult("slot0", result[1]);
-            
-            //console.log("=========");
-            //console.log(decodedSlot0);
-            //console.log("=========");
-            //console.log(decodedLiq);
-
-            expect(result.length).to.equal(2);
-        });
-        */
         it("Loads Price Data", async function () {
             const { Multicall, provider, poolContract, quoter2Addr, quoter2Contract, POSUSDCE, WETH, ARB_INPUT_SIZES, owner, otherAccount } = await (0, network_helpers_1.loadFixture)(testFixture);
             const data = [];
@@ -66,7 +43,7 @@ describe("Multicall", function () {
             for (let i = 0; i < ARB_INPUT_SIZES.length; i++) {
                 amts.push(ARB_INPUT_SIZES[i].toString());
                 const amt = hardhat_1.default.ethers.parseUnits(amts[i], 6);
-                console.log(`${ARB_INPUT_SIZES[i]}  -  ${amt}`);
+                //console.log(`${ARB_INPUT_SIZES[i]}  -  ${amt}`);
                 const paramsIn = {
                     tokenIn: POSUSDCE,
                     tokenOut: WETH,
@@ -111,10 +88,10 @@ describe("Multicall", function () {
                 const decimalShift = 10 ** 18;
                 const priceIn = (parseFloat(amt) / parseFloat(decodedIn[0].toString())) * decimalShift;
                 const priceOut = (parseFloat(amt) / parseFloat(decodedOut[0].toString())) * decimalShift;
-                console.log(`${i} BUYING ${amt} UDSC worth of WETH price - ${priceIn.toFixed(3)}`);
-                console.log(`${i + 1} SELLING ${amt} UDSC worth of WETH price - ${priceOut.toFixed(3)}`);
+                //console.log(`${i} BUYING ${amt} UDSC worth of WETH price - ${priceIn.toFixed(3)}`);
+                //console.log(`${i + 1} SELLING ${amt} UDSC worth of WETH price - ${priceOut.toFixed(3)}`);
             }
-            console.log('finitto');
+            //console.log('finitto');
         });
     });
 });

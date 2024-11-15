@@ -1,6 +1,8 @@
 interface IPriceData {
-    direction: string, 
-    amt: number,
+    direction: string,
+    token0Amt: number,
+    token0AmtWei: bigint,
+    token1AmtWei: bigint,
     price: number
 }
 

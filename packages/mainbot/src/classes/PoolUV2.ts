@@ -52,24 +52,27 @@ class PoolUV2 implements IPool{
             this.priceData.length = 0;
 
             // set up for the multicall
-            const data: any[] = [];
-            const targets: string[] = [];
-            let amt: bigint;
-        
+            const targets: string[] = [];  // the addresses the multicall functions are being directed to
+            const data: any[] = []; // the necoded function data for each function
+            let amt: number; // human readable - token0 amount in / out depending on whether see side ot buy side
+            let parsedAmt: bigint; // bigint / wei - token0 amount in / out depending on whether see side ot buy side
+
             // for each of the arb Input Sizes we are tracking
             for (let i = 0; i < this.arbInputSizes.length; i++) {
             
-                // denominated in token0's
-                amt = parseUnits(this.arbInputSizes[i].toString(), this.tokens[0].decimals);
-            
+                // get the amount
+                amt = this.arbInputSizes[i];
+                // parse the amount to wei
+                parsedAmt = parseUnits(amt.toString(), this.tokens[0].decimals);
+
                 // set up for getAmountsOut - purchase token 1 price  (denominated in token0)
                 targets.push(this.router_addr);
-                const encodedOut: any = this.router.interface.encodeFunctionData("getAmountsOut", [amt, [this.tokens[0].address, this.tokens[1].address]]);
+                const encodedOut: any = this.router.interface.encodeFunctionData("getAmountsOut", [parsedAmt, [this.tokens[0].address, this.tokens[1].address]]);
                 data.push(encodedOut);
 
                 // set up for getAmountsIn - selling  token 1 price  (denominated in token0)
                 targets.push(this.router_addr);
-                const encodedIn: any = this.router.interface.encodeFunctionData("getAmountsIn", [amt, [this.tokens[1].address, this.tokens[0].address]]);
+                const encodedIn: any = this.router.interface.encodeFunctionData("getAmountsIn", [parsedAmt, [this.tokens[1].address, this.tokens[0].address]]);
                 data.push(encodedIn);
 
             }
@@ -78,6 +81,7 @@ class PoolUV2 implements IPool{
             const results = await this.utils.multicall.multicall.staticCall(targets, data);
         
             for (let i = 0; i < results.length; i += 2) {
+
                 const decodedIn = this.router.interface.decodeFunctionResult("getAmountsOut", results[i]);
                 const decodedOut = this.router.interface.decodeFunctionResult("getAmountsIn", results[i + 1]);
                 let amt: number = 0;
@@ -88,14 +92,15 @@ class PoolUV2 implements IPool{
                 } else {
                     amt = this.arbInputSizes[(i - 1) / 2];
                 }
+                parsedAmt = parseUnits(amt.toString(), this.tokens[0].decimals);
 
                 const decimalShift: bigint = 10n ** BigInt(this.tokens[1].decimals);
             
                 const priceIn: number = (parseFloat(amt.toString()) / parseFloat(decodedIn[0][1].toString())) * parseFloat(decimalShift.toString());
                 const priceOut: number = (parseFloat(amt.toString()) / parseFloat(decodedOut[0][0].toString())) * parseFloat(decimalShift.toString());
 
-                this.priceData.push({ "direction": "BUY", "amt": amt, "price": priceIn });
-                this.priceData.push({ "direction": "SELL", "amt": amt, "price": priceOut });
+                this.priceData.push({ "direction": "BUY", "token0Amt": amt, "token0AmtWei": parsedAmt, "token1AmtWei": decodedIn[0][1], "price": priceIn });
+                this.priceData.push({ "direction": "SELL", "token0Amt": amt, "token0AmtWei": parsedAmt, "token1AmtWei": decodedOut[0][0], "price": priceOut });
             }
         } catch (ex: any){
             
@@ -118,7 +123,7 @@ class PoolUV2 implements IPool{
     }
 
     startSwapListener(_tracker: ListenerTracker) {
-        _tracker.addListener(this.name, this.pool, 'Swap', (sender, amount0In, amount1In, amount0Out, amount1Out, to) => { this.handleSwapEvent(); })
+        _tracker.addListener(this.pairName, this.name, this.pool, 'Swap', (sender, amount0In, amount1In, amount0Out, amount1Out, to) => { this.handleSwapEvent(); })
         this.utils.logger.log('info',`POOLUV2.startSwapListener : starting listener on ${this.name}`);
     }
 

@@ -1,9 +1,5 @@
 import path from 'path';
-import {
-    time,
-    loadFixture,
-  } from "@nomicfoundation/hardhat-toolbox/network-helpers";
-  import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
+import {time,loadFixture,} from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import { expect } from "chai";
 import hre from "hardhat";
 import { vars } from 'hardhat/config';
@@ -41,30 +37,6 @@ describe("Multicall", function () {
     }
   
     describe("multicall", function () {
-        /*
-        it("Calls Pools", async function () {
-            const { Multicall, provider, POOL_ADDRESS, poolContract, quoter2Addr, quoter2Contract, owner, otherAccount } = await loadFixture(testFixture);
-            
-            const encoded1: any = poolContract.interface.encodeFunctionData("liquidity");
-            const encoded2: string = poolContract.interface.encodeFunctionData("slot0");
-
-            const targets: string[] = [POOL_ADDRESS, POOL_ADDRESS];
-            const data: any[] = [encoded1, encoded2];
-
-            const result: string[] = await Multicall.multicall.staticCall(targets, data);
-
-            const decodedLiq = poolContract.interface.decodeFunctionResult("liquidity", result[0]);
-            const decodedSlot0 = poolContract.interface.decodeFunctionResult("slot0", result[1]);
-            
-            //console.log("=========");
-            //console.log(decodedSlot0);
-            //console.log("=========");
-            //console.log(decodedLiq);
-
-            expect(result.length).to.equal(2);
-        });
-        */
-
         it("Loads Price Data", async function () {
             const { Multicall, provider,  poolContract, quoter2Addr, quoter2Contract, POSUSDCE, WETH, ARB_INPUT_SIZES, owner, otherAccount } = await loadFixture(testFixture);
             
@@ -91,7 +63,7 @@ describe("Multicall", function () {
             for (let i = 0; i < ARB_INPUT_SIZES.length; i++){
                 amts.push(ARB_INPUT_SIZES[i].toString());
                 const amt: bigint = hre.ethers.parseUnits(amts[i], 6);
-                console.log(`${ARB_INPUT_SIZES[i]}  -  ${amt}`);
+                //console.log(`${ARB_INPUT_SIZES[i]}  -  ${amt}`);
 
                 const paramsIn: QuoteExactInputSingleParams = {
                     tokenIn: POSUSDCE,
@@ -147,10 +119,10 @@ describe("Multicall", function () {
                 const decimalShift: number = 10 ** 18;
                 const priceIn: number = (parseFloat(amt) / parseFloat(decodedIn[0].toString()))*decimalShift;
                 const priceOut: number = (parseFloat(amt) / parseFloat(decodedOut[0].toString()))*decimalShift;
-                console.log(`${i} BUYING ${amt} UDSC worth of WETH price - ${priceIn.toFixed(3)}`);
-                console.log(`${i + 1} SELLING ${amt} UDSC worth of WETH price - ${priceOut.toFixed(3)}`);
+                //console.log(`${i} BUYING ${amt} UDSC worth of WETH price - ${priceIn.toFixed(3)}`);
+                //console.log(`${i + 1} SELLING ${amt} UDSC worth of WETH price - ${priceOut.toFixed(3)}`);
             }
-            console.log('finitto');
+            //console.log('finitto');
             
         });
     });

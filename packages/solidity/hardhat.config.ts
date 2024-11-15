@@ -6,7 +6,20 @@ import { vars } from 'hardhat/config';
 const INFURA_API_KEY = vars.get('INFURA_API_KEY');
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.20",
+    solidity: {
+        compilers: [
+            {
+              version: "0.5.16",
+            },
+            {
+              version: "0.8.20",
+            },
+            {
+                version: "0.6.0",
+              },
+          ],
+    },
+
   networks: {
     hardhat: {
         forking: {

@@ -42,6 +42,46 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IUniswapV2Router02__factory>;
     getContractFactory(
+      name: "IUniswapV3SwapCallback",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IUniswapV3SwapCallback__factory>;
+    getContractFactory(
+      name: "IUniswapV3Pool",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IUniswapV3Pool__factory>;
+    getContractFactory(
+      name: "IUniswapV3PoolActions",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IUniswapV3PoolActions__factory>;
+    getContractFactory(
+      name: "IUniswapV3PoolDerivedState",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IUniswapV3PoolDerivedState__factory>;
+    getContractFactory(
+      name: "IUniswapV3PoolEvents",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IUniswapV3PoolEvents__factory>;
+    getContractFactory(
+      name: "IUniswapV3PoolImmutables",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IUniswapV3PoolImmutables__factory>;
+    getContractFactory(
+      name: "IUniswapV3PoolOwnerActions",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IUniswapV3PoolOwnerActions__factory>;
+    getContractFactory(
+      name: "IUniswapV3PoolState",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IUniswapV3PoolState__factory>;
+    getContractFactory(
+      name: "IQuoterV2",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IQuoterV2__factory>;
+    getContractFactory(
+      name: "ISwapRouter",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ISwapRouter__factory>;
+    getContractFactory(
       name: "ArbMoneyManager",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ArbMoneyManager__factory>;
@@ -50,41 +90,17 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ArbRoleManager__factory>;
     getContractFactory(
-      name: "IntegrationBalancer",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IntegrationBalancer__factory>;
-    getContractFactory(
-      name: "IDMMExchangeRouter",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IDMMExchangeRouter__factory>;
-    getContractFactory(
-      name: "IntegrationKyberClassic",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IntegrationKyberClassic__factory>;
-    getContractFactory(
-      name: "IntegrationUniswapV2",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IntegrationUniswapV2__factory>;
-    getContractFactory(
-      name: "IntegrationUniswapV3",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IntegrationUniswapV3__factory>;
-    getContractFactory(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Lock__factory>;
-    getContractFactory(
       name: "Multicall",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Multicall__factory>;
     getContractFactory(
-      name: "Swapper",
+      name: "SwapperUV2",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Swapper__factory>;
+    ): Promise<Contracts.SwapperUV2__factory>;
     getContractFactory(
-      name: "Test",
+      name: "SwapperUV3Test",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Test__factory>;
+    ): Promise<Contracts.SwapperUV3Test__factory>;
 
     getContractAt(
       name: "AccessControl",
@@ -122,6 +138,56 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IUniswapV2Router02>;
     getContractAt(
+      name: "IUniswapV3SwapCallback",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IUniswapV3SwapCallback>;
+    getContractAt(
+      name: "IUniswapV3Pool",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IUniswapV3Pool>;
+    getContractAt(
+      name: "IUniswapV3PoolActions",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IUniswapV3PoolActions>;
+    getContractAt(
+      name: "IUniswapV3PoolDerivedState",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IUniswapV3PoolDerivedState>;
+    getContractAt(
+      name: "IUniswapV3PoolEvents",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IUniswapV3PoolEvents>;
+    getContractAt(
+      name: "IUniswapV3PoolImmutables",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IUniswapV3PoolImmutables>;
+    getContractAt(
+      name: "IUniswapV3PoolOwnerActions",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IUniswapV3PoolOwnerActions>;
+    getContractAt(
+      name: "IUniswapV3PoolState",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IUniswapV3PoolState>;
+    getContractAt(
+      name: "IQuoterV2",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IQuoterV2>;
+    getContractAt(
+      name: "ISwapRouter",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ISwapRouter>;
+    getContractAt(
       name: "ArbMoneyManager",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -132,50 +198,20 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ArbRoleManager>;
     getContractAt(
-      name: "IntegrationBalancer",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IntegrationBalancer>;
-    getContractAt(
-      name: "IDMMExchangeRouter",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IDMMExchangeRouter>;
-    getContractAt(
-      name: "IntegrationKyberClassic",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IntegrationKyberClassic>;
-    getContractAt(
-      name: "IntegrationUniswapV2",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IntegrationUniswapV2>;
-    getContractAt(
-      name: "IntegrationUniswapV3",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IntegrationUniswapV3>;
-    getContractAt(
-      name: "Lock",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Lock>;
-    getContractAt(
       name: "Multicall",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.Multicall>;
     getContractAt(
-      name: "Swapper",
+      name: "SwapperUV2",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.Swapper>;
+    ): Promise<Contracts.SwapperUV2>;
     getContractAt(
-      name: "Test",
+      name: "SwapperUV3Test",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.Test>;
+    ): Promise<Contracts.SwapperUV3Test>;
 
     deployContract(
       name: "AccessControl",
@@ -206,6 +242,46 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IUniswapV2Router02>;
     deployContract(
+      name: "IUniswapV3SwapCallback",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3SwapCallback>;
+    deployContract(
+      name: "IUniswapV3Pool",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3Pool>;
+    deployContract(
+      name: "IUniswapV3PoolActions",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolActions>;
+    deployContract(
+      name: "IUniswapV3PoolDerivedState",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolDerivedState>;
+    deployContract(
+      name: "IUniswapV3PoolEvents",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolEvents>;
+    deployContract(
+      name: "IUniswapV3PoolImmutables",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolImmutables>;
+    deployContract(
+      name: "IUniswapV3PoolOwnerActions",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolOwnerActions>;
+    deployContract(
+      name: "IUniswapV3PoolState",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolState>;
+    deployContract(
+      name: "IQuoterV2",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IQuoterV2>;
+    deployContract(
+      name: "ISwapRouter",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ISwapRouter>;
+    deployContract(
       name: "ArbMoneyManager",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ArbMoneyManager>;
@@ -214,41 +290,17 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ArbRoleManager>;
     deployContract(
-      name: "IntegrationBalancer",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IntegrationBalancer>;
-    deployContract(
-      name: "IDMMExchangeRouter",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IDMMExchangeRouter>;
-    deployContract(
-      name: "IntegrationKyberClassic",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IntegrationKyberClassic>;
-    deployContract(
-      name: "IntegrationUniswapV2",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IntegrationUniswapV2>;
-    deployContract(
-      name: "IntegrationUniswapV3",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IntegrationUniswapV3>;
-    deployContract(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Lock>;
-    deployContract(
       name: "Multicall",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Multicall>;
     deployContract(
-      name: "Swapper",
+      name: "SwapperUV2",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Swapper>;
+    ): Promise<Contracts.SwapperUV2>;
     deployContract(
-      name: "Test",
+      name: "SwapperUV3Test",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Test>;
+    ): Promise<Contracts.SwapperUV3Test>;
 
     deployContract(
       name: "AccessControl",
@@ -286,6 +338,56 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IUniswapV2Router02>;
     deployContract(
+      name: "IUniswapV3SwapCallback",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3SwapCallback>;
+    deployContract(
+      name: "IUniswapV3Pool",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3Pool>;
+    deployContract(
+      name: "IUniswapV3PoolActions",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolActions>;
+    deployContract(
+      name: "IUniswapV3PoolDerivedState",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolDerivedState>;
+    deployContract(
+      name: "IUniswapV3PoolEvents",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolEvents>;
+    deployContract(
+      name: "IUniswapV3PoolImmutables",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolImmutables>;
+    deployContract(
+      name: "IUniswapV3PoolOwnerActions",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolOwnerActions>;
+    deployContract(
+      name: "IUniswapV3PoolState",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IUniswapV3PoolState>;
+    deployContract(
+      name: "IQuoterV2",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IQuoterV2>;
+    deployContract(
+      name: "ISwapRouter",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ISwapRouter>;
+    deployContract(
       name: "ArbMoneyManager",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -296,50 +398,20 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ArbRoleManager>;
     deployContract(
-      name: "IntegrationBalancer",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IntegrationBalancer>;
-    deployContract(
-      name: "IDMMExchangeRouter",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IDMMExchangeRouter>;
-    deployContract(
-      name: "IntegrationKyberClassic",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IntegrationKyberClassic>;
-    deployContract(
-      name: "IntegrationUniswapV2",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IntegrationUniswapV2>;
-    deployContract(
-      name: "IntegrationUniswapV3",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IntegrationUniswapV3>;
-    deployContract(
-      name: "Lock",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Lock>;
-    deployContract(
       name: "Multicall",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Multicall>;
     deployContract(
-      name: "Swapper",
+      name: "SwapperUV2",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Swapper>;
+    ): Promise<Contracts.SwapperUV2>;
     deployContract(
-      name: "Test",
+      name: "SwapperUV3Test",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Test>;
+    ): Promise<Contracts.SwapperUV3Test>;
 
     // default types
     getContractFactory(

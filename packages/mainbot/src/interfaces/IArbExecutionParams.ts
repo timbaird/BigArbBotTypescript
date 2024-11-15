@@ -2,13 +2,12 @@ import ArbToken from "../classes/ArbToken";
 import { Contract } from "ethers";
 
 interface IArbExecutionParams {
-    token0: ArbToken,
-    token1: ArbToken,
-    protocol0: string,
-    router0_addr: string,
-    protocol1: string,
-    router1_addr: string,
-    amountIn: number;
+    tokens: ArbToken[],
+    protocols: string[],
+    routers: string[],
+    token0AmtIn: number,
+    token0AmtInWeiBuy: bigint,
+    token1AmtOutWeiBuy: bigint,
     estimatedProfit: number
 }
 

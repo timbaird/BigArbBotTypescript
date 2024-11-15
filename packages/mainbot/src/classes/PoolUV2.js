@@ -33,20 +33,23 @@ class PoolUV2 {
             // reset existing priceData
             this.priceData.length = 0;
             // set up for the multicall
-            const data = [];
-            const targets = [];
-            let amt;
+            const targets = []; // the addresses the multicall functions are being directed to
+            const data = []; // the necoded function data for each function
+            let amt; // human readable - token0 amount in / out depending on whether see side ot buy side
+            let parsedAmt; // bigint / wei - token0 amount in / out depending on whether see side ot buy side
             // for each of the arb Input Sizes we are tracking
             for (let i = 0; i < this.arbInputSizes.length; i++) {
-                // denominated in token0's
-                amt = (0, ethers_1.parseUnits)(this.arbInputSizes[i].toString(), this.tokens[0].decimals);
+                // get the amount
+                amt = this.arbInputSizes[i];
+                // parse the amount to wei
+                parsedAmt = (0, ethers_1.parseUnits)(amt.toString(), this.tokens[0].decimals);
                 // set up for getAmountsOut - purchase token 1 price  (denominated in token0)
                 targets.push(this.router_addr);
-                const encodedOut = this.router.interface.encodeFunctionData("getAmountsOut", [amt, [this.tokens[0].address, this.tokens[1].address]]);
+                const encodedOut = this.router.interface.encodeFunctionData("getAmountsOut", [parsedAmt, [this.tokens[0].address, this.tokens[1].address]]);
                 data.push(encodedOut);
                 // set up for getAmountsIn - selling  token 1 price  (denominated in token0)
                 targets.push(this.router_addr);
-                const encodedIn = this.router.interface.encodeFunctionData("getAmountsIn", [amt, [this.tokens[1].address, this.tokens[0].address]]);
+                const encodedIn = this.router.interface.encodeFunctionData("getAmountsIn", [parsedAmt, [this.tokens[1].address, this.tokens[0].address]]);
                 data.push(encodedIn);
             }
             // this should get the price data in a single call
@@ -62,11 +65,12 @@ class PoolUV2 {
                 else {
                     amt = this.arbInputSizes[(i - 1) / 2];
                 }
+                parsedAmt = (0, ethers_1.parseUnits)(amt.toString(), this.tokens[0].decimals);
                 const decimalShift = 10n ** BigInt(this.tokens[1].decimals);
                 const priceIn = (parseFloat(amt.toString()) / parseFloat(decodedIn[0][1].toString())) * parseFloat(decimalShift.toString());
                 const priceOut = (parseFloat(amt.toString()) / parseFloat(decodedOut[0][0].toString())) * parseFloat(decimalShift.toString());
-                this.priceData.push({ "direction": "BUY", "amt": amt, "price": priceIn });
-                this.priceData.push({ "direction": "SELL", "amt": amt, "price": priceOut });
+                this.priceData.push({ "direction": "BUY", "token0Amt": amt, "token0AmtWei": parsedAmt, "token1AmtWei": decodedIn[0][1], "price": priceIn });
+                this.priceData.push({ "direction": "SELL", "token0Amt": amt, "token0AmtWei": parsedAmt, "token1AmtWei": decodedOut[0][0], "price": priceOut });
             }
         }
         catch (ex) {
@@ -85,7 +89,7 @@ class PoolUV2 {
         return this.priceData;
     }
     startSwapListener(_tracker) {
-        _tracker.addListener(this.name, this.pool, 'Swap', (sender, amount0In, amount1In, amount0Out, amount1Out, to) => { this.handleSwapEvent(); });
+        _tracker.addListener(this.pairName, this.name, this.pool, 'Swap', (sender, amount0In, amount1In, amount0Out, amount1Out, to) => { this.handleSwapEvent(); });
         this.utils.logger.log('info', `POOLUV2.startSwapListener : starting listener on ${this.name}`);
     }
     async handleSwapEvent() {
